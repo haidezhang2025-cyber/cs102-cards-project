@@ -77,59 +77,63 @@ public class Game {
                 System.out.println(player.getName().toUpperCase() + "'s turn");
                 turnDisplay(players, player, tb, nobleDeck, nobleFaceUp, developmentFaceUp);
 
-                boolean quit = false;
-                boolean valid = false;
-                while (!valid) {
-                    System.out.println("\nChoose action:");
-                    System.out.println("1) Take 3 different color tokens");
-                    System.out.println("2) Take 2 same color tokens");
-                    System.out.println("3) Buy a development card");
-                    System.out.println("4) Reserve a development card");
-                    System.out.println("5) Quit");
-                    System.out.print("Your choice: ");
-                    int choice = sc.nextInt();
-                    sc.nextLine();
+                if (player instanceof Computer computer) {
+                    computer.turnAlgorithm();
+                } else {
+                    boolean quit = false;
+                    boolean valid = false;
+                    while (!valid) {
+                        System.out.println("\nChoose action:");
+                        System.out.println("1) Take 3 different color tokens");
+                        System.out.println("2) Take 2 same color tokens");
+                        System.out.println("3) Buy a development card");
+                        System.out.println("4) Reserve a development card");
+                        System.out.println("5) Quit");
+                        System.out.print("Your choice: ");
+                        int choice = sc.nextInt();
+                        sc.nextLine();
 
-                    switch (choice) {
-                        default:
-                            System.out.println("Invalid choice.");
-                            break;
+                        switch (choice) {
+                            default:
+                                System.out.println("Invalid choice.");
+                                break;
 
-                        case 1:
-                            valid = takeThreeTokens(sc, tb, player);
-                            break;
+                            case 1:
+                                valid = takeThreeTokens(sc, tb, player);
+                                break;
 
-                        case 2:
-                            valid = takeTwoTokens(sc, tb, player);
-                            break;
+                            case 2:
+                                valid = takeTwoTokens(sc, tb, player);
+                                break;
 
-                        case 3:
-                            valid = buyCard(sc, tb, player, developmentFaceUp, developmentDesk);
-                            break;
-                    
-                        case 4:
-                            valid = reserveCard(sc, tb, player, developmentFaceUp, developmentDesk);
-                            break;
+                            case 3:
+                                valid = buyCard(sc, tb, player, developmentFaceUp, developmentDesk);
+                                break;
+                        
+                            case 4:
+                                valid = reserveCard(sc, tb, player, developmentFaceUp, developmentDesk);
+                                break;
 
-                        case 5:
-                            System.out.println("Confirm quit? Y/N: ");
-                            String answer = sc.nextLine().toUpperCase();
-                            if (answer.equals("Y")) {
-                                System.out.println("Quit game.");
-                                end = true;
-                                quit = true;
-                                valid = true;
-                            } 
-                        }
-                }
+                            case 5:
+                                System.out.println("Confirm quit? Y/N: ");
+                                String answer = sc.nextLine().toUpperCase();
+                                if (answer.equals("Y")) {
+                                    System.out.println("Quit game.");
+                                    end = true;
+                                    quit = true;
+                                    valid = true;
+                                } 
+                            }
+                    }
 
-                if (quit) {
-                    break;
-                }
+                    if (quit) {
+                        break;
+                    }
 
-                if (valid) {
-                    end = endTurn(sc, player, winningCondition, tb);
-                    awardNobleIfAny(nobleService, player, nobleDeck, sc);
+                    if (valid) {
+                        end = endTurn(sc, player, winningCondition, tb);
+                        awardNobleIfAny(nobleService, player, nobleDeck, sc);
+                    }
                 }
             }
         }
