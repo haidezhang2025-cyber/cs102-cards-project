@@ -22,6 +22,26 @@ public class Game {
         System.out.println("5) Quit");
         System.out.print("Your choice: ");
     }
+    public static void playMsg(){
+        System.out.println(" ");
+        System.out.println("============================================================");
+        System.out.println("                     S P L E N D O R                        ");
+        System.out.println("------------------------------------------------------------");
+        System.out.println("        Trade   •   Build   •   Earn Prestige   •   Win     ");
+        System.out.println("============================================================");
+        System.out.println("                     G2T4 EDITION                           ");
+        System.out.println("============================================================");
+    }
+    public static void playVsPlayer(){
+        playMsg();
+        System.out.println("                Playing Against the local Player                ");
+        System.out.println("============================================================");
+    }
+    public static void playVsCom(){
+        playMsg();
+        System.out.println("                Playing Against the Computer                ");
+        System.out.println("============================================================");
+    }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -40,14 +60,19 @@ public class Game {
             winningCondition = reader.getPrestigePointToWin(); 
             numOfPlayers = reader.getNumOfPlayers();
             //Test commands to verify if the properties file works
-            System.out.println(winningCondition);
-            System.out.println(numOfPlayers);
-            System.out.println("File found");
+            // System.out.println(winningCondition);
+            // System.out.println(numOfPlayers);
+            
+            System.out.println("Config.properties File found!");
+            System.out.println("Initializing Game configuration properties");
+            System.out.printf("Number of Prestige points to win: %d \n", winningCondition);
+            System.out.printf("Number of Players: %d \n ", numOfPlayers);
 
             // Call the method on the instance
         } catch ( Exception e){
                 System.out.println("Cant find file");
         }
+        // If no config properties is found
         if (winningCondition == 0){
             winningCondition = 15;
             System.out.println("File not found.. Default winning Condition set to 15");
@@ -74,8 +99,13 @@ public class Game {
         }
         if (numOfPlayers < 2) {
             numOfPlayers += 1;
-            System.out.println("Players less than 2, Game will be played agaisnt Computer.");
+
+            playVsCom();
             players.add(new Computer());
+        } else {
+            //Displays the Player v Player print screen instead
+            playVsPlayer();
+
         }
         
         
@@ -90,8 +120,7 @@ public class Game {
 
         boolean end = false;
         while (!end) {
-            for (Player player : players) {
-                
+            for (Player player : players) { 
                 System.out.println();
                 System.out.println();
                 System.out.println();
