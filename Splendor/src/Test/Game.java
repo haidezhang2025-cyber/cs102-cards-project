@@ -19,10 +19,8 @@ public class Game {
 
         //need to change path of file that reader is reading from
         //no need number of players
-        int winningCondition = 15;  //default if loading error
-        
-
-
+        int winningCondition = 0;  //default if loading error
+    
         ArrayList<Player> players = new ArrayList<>();
 
         //list of players
@@ -41,7 +39,11 @@ public class Game {
         } catch ( Exception e){
                 System.out.println("Cant find file");
         }
-        
+        if (winningCondition == 0){
+            winningCondition = 15;
+            System.out.println("File not found.. Default winning Condition set to 15");
+        }
+
         while (numOfPlayers == 0) {
             System.out.print("Enter number of players: ");
             numOfPlayers = sc.nextInt();
@@ -52,6 +54,7 @@ public class Game {
             }
             
         }
+
         if (numOfPlayers > 0){
             for (int i = 1; i <= numOfPlayers; i++) {
                 System.out.printf("Player %d Name: ", i);
@@ -62,6 +65,7 @@ public class Game {
         }
         if (numOfPlayers < 2) {
             numOfPlayers += 1;
+            System.out.println("Players less than 2, Game will be played agaisnt Computer.");
             players.add(new Computer());
         }
         
@@ -98,6 +102,7 @@ public class Game {
                         System.out.println("4) Reserve a development card");
                         System.out.println("5) Quit");
                         System.out.print("Your choice: ");
+                        
                         int choice = sc.nextInt();
                         sc.nextLine();
 
