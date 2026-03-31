@@ -57,10 +57,12 @@ public class BoardView extends VBox {
     public void loadTier1(List<DevelopmentCard> cards) {
         tier1Row.getChildren().clear();
 
+        // First card is back of tierX
         tier1Row.getChildren().add(
             new CardView("tier1_deck", "/UI/images/cards/devCards/tier1/tier1Back.png", 140, 196)
         );
 
+        // Then subsequent cards
         for (DevelopmentCard card : cards) {
             String cardId = card.getID();
             String imagePath = "/UI/images/cards/devCards/tier1/" + cardId + ".png";

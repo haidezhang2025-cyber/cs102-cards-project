@@ -7,6 +7,8 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
 
 <AnchorPane fx:id="root"
             prefHeight="900.0" prefWidth="1400.0"
@@ -45,8 +47,8 @@
 
         <!-- Board View (1 noble row, 3 card rows)-->
         <StackPane fx:id="boardContainer"
-           AnchorPane.topAnchor="80.0"
-           AnchorPane.bottomAnchor="80.0"
+           AnchorPane.topAnchor="60.0"
+           AnchorPane.bottomAnchor="100.0"
            AnchorPane.leftAnchor="80.0"
            AnchorPane.rightAnchor="170.0" />
 
@@ -105,6 +107,42 @@
                 </Button>
             </children>
         </VBox>
+
+        <!-- Bottom status bar -->
+        <HBox fx:id="statusBar"
+              alignment="CENTER_LEFT"
+              prefHeight="56.0"
+              spacing="12.0"
+              style="-fx-background-color: rgba(15, 23, 42, 0.88);
+                     -fx-background-radius: 14 14 0 0;
+                     -fx-padding: 0 18 0 18;
+                     -fx-border-color: rgba(255,255,255,0.12);
+                     -fx-border-width: 1 0 0 0;"
+              AnchorPane.leftAnchor="18.0"
+              AnchorPane.rightAnchor="18.0"
+              AnchorPane.bottomAnchor="12.0">
+        
+            <children>
+                <Label fx:id="statusIcon"
+                       text="ℹ"
+                       minWidth="28.0"
+                       minHeight="28.0"
+                       alignment="CENTER"
+                       style="-fx-background-color: rgba(59,130,246,0.95);
+                              -fx-background-radius: 999;
+                              -fx-text-fill: white;
+                              -fx-font-size: 15px;
+                              -fx-font-weight: bold;" />
+        
+                <Label fx:id="statusLabel"
+                       text="Welcome to Splendor!"
+                       maxWidth="1.7976931348623157E308"
+                       HBox.hgrow="ALWAYS"
+                       style="-fx-text-fill: white;
+                              -fx-font-size: 15px;
+                              -fx-font-weight: bold;" />
+            </children>
+        </HBox>
 
     </children>
 </AnchorPane>

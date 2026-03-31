@@ -8,6 +8,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,9 @@ import Cards.DevelopmentCard.DevelopmentCardDeck;
 import Cards.DevelopmentCard.DevelopmentCardFaceUP;
 import Cards.Noble.NobleDeck;
 import Cards.Noble.NobleFaceUP;
+import Cards.Token.TokenBank;
+import Test.GameLogic;
+import Test.MoveResult;
 
 public class Controller {
 
@@ -54,7 +59,15 @@ public class Controller {
 
     // Board (4 rows of cards)
     @FXML private StackPane boardContainer;
+
+    // Label to show text after moves (instead of console)
+    @FXML private Label statusLabel;
+    @FXML private HBox statusBar;
+    @FXML private Label statusIcon;
+
+    // Back end!
     private BoardView boardView;
+    private GameLogic gameLogic;
 
     private static final double BASE_W = 1400;
     private static final double BASE_H = 900;
@@ -92,7 +105,107 @@ public class Controller {
         boardView.loadTier1(upDeck.getFaceUp(1));
         boardView.loadTier2(upDeck.getFaceUp(2));
         boardView.loadTier3(upDeck.getFaceUp(3));
+
+        // Success bar
+        // MoveResult result = MoveResult.success("hi");
+        // showSuccess(result.getMessage());
+
+        // Fail bar
+        MoveResult result = MoveResult.fail("hi");
+        showError(result.getMessage());
     }
+
+
+    public void setGameLogic(GameLogic gameLogic) {
+        this.gameLogic = gameLogic;
+        refreshUI();
+    }
+
+    @FXML
+    private void handleTakeRed() {
+        MoveResult result = gameLogic.takeTwoTokens(TokenBank.RED);
+        statusLabel.setText(result.getMessage());
+
+        if (result.isSuccess()) {
+            showSuccess(result.getMessage());
+            refreshUI();
+        } else {
+            showError(result.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleEndTurn() {
+        MoveResult result = gameLogic.endTurn();
+        statusLabel.setText(result.getMessage());
+
+        if (result.isSuccess()) {
+            showSuccess(result.getMessage());
+            refreshUI();
+        } else {
+            showError(result.getMessage());
+        }
+    }
+
+    private void refreshUI() {
+        // update labels, token counts, visible cards, reserves, current player, etc.
+    }
+    
+
+
+
+/* ----------Label Helper Methods------------------------------------ */
+    private void showSuccess(String message) {
+        statusLabel.setText(message);
+        statusIcon.setText("✓");
+
+        statusBar.setStyle(
+            "-fx-background-color: rgba(75,85,99,0.92);" +
+            "-fx-background-radius: 14 14 0 0;" +
+            "-fx-padding: 0 18 0 18;" +
+            "-fx-border-color: rgba(255,255,255,0.12);" +
+            "-fx-border-width: 1 0 0 0;"
+        );
+
+        statusIcon.setStyle(
+            "-fx-background-color: rgba(255,255,255,0.22);" +
+            "-fx-background-radius: 999;" +
+            "-fx-text-fill: white;" +
+            "-fx-font-size: 15px;" +
+            "-fx-font-weight: bold;"
+        );
+    }
+
+    private void showError(String message) {
+        statusLabel.setText(message);
+        statusIcon.setText("✕");
+
+        statusBar.setStyle(
+            "-fx-background-color: rgba(199, 72, 72, 0.92);" +
+            "-fx-background-radius: 14 14 0 0;" +
+            "-fx-padding: 0 18 0 18;" +
+            "-fx-border-color: rgba(255,255,255,0.12);" +
+            "-fx-border-width: 1 0 0 0;"
+        );
+
+        statusIcon.setStyle(
+            "-fx-background-color: rgba(255,255,255,0.22);" +
+            "-fx-background-radius: 999;" +
+            "-fx-text-fill: white;" +
+            "-fx-font-size: 15px;" +
+            "-fx-font-weight: bold;"
+        );
+    }
+
+
+
+
+
+
+
+
+
+/* ----------Setting Up Clouds------------------------------------ */
 
     private void loadBackgrounds() {
         gameSky.setImage(loadBackgroundImage("gameSky.png"));
@@ -232,6 +345,8 @@ public class Controller {
         return new Image(resource.toExternalForm());
     }
 
+
+/* ----------On Clicks------------------------------------ */
     @FXML
     private void onGoldTokenClick() {
         System.out.println("Gold token clicked");
