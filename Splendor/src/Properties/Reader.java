@@ -32,4 +32,7 @@ public class Reader {
     public int getColourToken(String str){
         return Integer.parseInt(configProps.getProperty(str)); 
     }
+    public String getTierDeck(int tier){
+        return configProps.getProperty("tier"+tier+"DeckDir");  
+    }
 }

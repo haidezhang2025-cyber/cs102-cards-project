@@ -33,9 +33,17 @@ public class DevelopmentCardDeck {
     // Call the constructor in the DevelopementCard to initialise all the 90 cards
     private void initialiseCards() {
         int numOfCards = 0;
+        String tier1DeckDir = null;
+        String tier2DeckDir = null;
+        String tier3DeckDir = null;
+
+
         try{
             Reader reader = new Reader(); // Create an instance of Reader
             numOfCards = reader.getNumOfCards();
+            tier1DeckDir = reader.getTierDeck(1);
+            tier2DeckDir = reader.getTierDeck(2);
+            tier3DeckDir = reader.getTierDeck(3);
             System.out.println("Num of Cards properties  found!");
             System.out.printf("Number of Cards Shuffled: %d \n", numOfCards);
             // Call the method on the instance
@@ -53,23 +61,23 @@ public class DevelopmentCardDeck {
             System.out.println("Num of Cards more than 90.. Setting to maximum 90");
             numOfCards = 90; 
         }
-        // run the cards development
+       // run the cards development
         if (numOfCards == 60){
-            initializeDeck("src/Data/tier1.csv", level1Deck, 30);
-            initializeDeck("src/Data/tier2.csv", level2Deck, 20);
-            initializeDeck("src/Data/tier3.csv", level3Deck, 10);
+            initializeDeck(tier1DeckDir, level1Deck, 30);
+            initializeDeck(tier2DeckDir, level2Deck, 20);
+            initializeDeck(tier3DeckDir, level3Deck, 10);
         } else if ( numOfCards > 80){
-            initializeDeck("src/Data/tier1.csv", level1Deck, 40); 
-            initializeDeck("src/Data/tier2.csv", level2Deck, 30);
-            initializeDeck("src/Data/tier3.csv", level3Deck, numOfCards - 70);
+            initializeDeck(tier1DeckDir, level1Deck, 40); 
+            initializeDeck(tier2DeckDir, level2Deck, 30);
+            initializeDeck(tier3DeckDir, level3Deck, numOfCards - 70);
         } else if ( numOfCards > 70){
-            initializeDeck("src/Data/tier1.csv", level1Deck, 40); 
-            initializeDeck("src/Data/tier2.csv", level2Deck, numOfCards - 50);
-            initializeDeck("src/Data/tier3.csv", level3Deck, 10); 
+            initializeDeck(tier1DeckDir, level1Deck, 40); 
+            initializeDeck(tier2DeckDir, level2Deck, numOfCards - 50);
+            initializeDeck(tier3DeckDir, level3Deck, 10); 
         } else{ //likely the number of cards here would be between 60 - 70
-            initializeDeck("src/Data/tier1.csv", level1Deck, numOfCards - 30); 
-            initializeDeck("src/Data/tier2.csv", level2Deck, 20); 
-            initializeDeck("src/Data/tier2.csv", level2Deck, 10); 
+            initializeDeck(tier1DeckDir, level1Deck, numOfCards - 30); 
+            initializeDeck(tier2DeckDir, level2Deck, 20); 
+            initializeDeck(tier3DeckDir, level2Deck, 10); 
         }
     }
 
@@ -99,7 +107,7 @@ public class DevelopmentCardDeck {
     //         e.printStackTrace();
     //     }
     // }
-    
+
     //Current helper method
     public static void initializeDeck(String fileName, List<DevelopmentCard> deck, int NumOfCards) {
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
@@ -123,7 +131,7 @@ public class DevelopmentCardDeck {
                 deck.add(card);
                 count++;
                 //test code to verify that indeed only the set number of cards can be initialised
-                System.out.println(count);
+               // System.out.println(count);
             }
 
         } catch (IOException e) {
