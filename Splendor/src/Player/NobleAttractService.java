@@ -6,20 +6,19 @@
 package Player;
 
 import Cards.Noble.Noble;
-import Cards.Noble.NobleDeck;
+import Cards.Noble.NobleFaceUP;
+import Test.InputSafetyChecking;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import Cards.Noble.Noble;
-import Cards.Noble.NobleDeck;
 
 public class NobleAttractService {
 
     // Awards One noble to the player if possible.
     // return the Noble awarded, or null if player qualifies for nothing.
 
-    public Noble awardNobleIfPossible(Player player, NobleDeck deck, Scanner sc) {
-        ArrayList<Noble> eligible = deck.getAttractableNobles(player);
+    public Noble awardNobleIfPossible(Player player, NobleFaceUP nobleFaceUp, Scanner sc){
+        NobleService nobleService = new NobleService();
+        ArrayList<Noble> eligible = nobleService.getEligibleNobles(player, nobleFaceUp);
 
         if (eligible.isEmpty()) {
             return null;
