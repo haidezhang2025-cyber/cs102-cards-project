@@ -23,16 +23,29 @@ public class Reader {
         return Integer.parseInt(configProps.getProperty("numOfPlayers"));
     }
     public int getNumOfCards(){
-        return Integer.parseInt(configProps.getProperty("numOfCards")); 
+        return Integer.parseInt(configProps.getProperty("numOfCards"));
     }
 
     public int getCustomTokenMode(){
-        return Integer.parseInt(configProps.getProperty("enableCustomToken")); 
+        return Integer.parseInt(configProps.getProperty("enableCustomToken"));
     }
+
+    // In token class, the token names are all in capital letters, but the name of token in the properties file are all in lower case
+    // in order to avoid the caller cannot find the name, change all the characters to upper case. 
     public int getColourToken(String str){
-        return Integer.parseInt(configProps.getProperty(str)); 
+        String value = configProps.getProperty(str);
+        if(value == null){
+            value = configProps.getProperty(str.toUpperCase());
+        }
+        if(value == null){
+            value = configProps.getProperty(str.toLowerCase());
+        }
+        if(value == null) {
+            throw new IllegalArgumentException("Missing token config for color: " + str);
+        }
+        return Integer.parseInt(value);
     }
     public String getTierDeck(int tier){
-        return configProps.getProperty("tier"+tier+"DeckDir");  
+        return configProps.getProperty("tier"+tier+"DeckDir");
     }
 }

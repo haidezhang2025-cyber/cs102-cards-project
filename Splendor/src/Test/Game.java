@@ -22,6 +22,7 @@ public class Game {
         System.out.println("5) Quit");
         System.out.print("Your choice: ");
     }
+
     public static void playMsg(){
         System.out.println(" ");
         System.out.println("============================================================");
@@ -32,11 +33,13 @@ public class Game {
         System.out.println("                     G2T4 EDITION                           ");
         System.out.println("============================================================");
     }
+
     public static void playVsPlayer(){
         playMsg();
         System.out.println("                Playing Against the local Player                ");
         System.out.println("============================================================");
     }
+
     public static void playVsCom(){
         playMsg();
         System.out.println("                Playing Against the Computer                ");
@@ -49,7 +52,7 @@ public class Game {
         //need to change path of file that reader is reading from
         //no need number of players
         int winningCondition = 0;  //default if loading error
-    
+
         ArrayList<Player> players = new ArrayList<>();
 
         //list of players
@@ -57,12 +60,12 @@ public class Game {
         int numOfPlayers = 0;
         try{
             Reader reader = new Reader(); // Create an instance of Reader
-            winningCondition = reader.getPrestigePointToWin(); 
+            winningCondition = reader.getPrestigePointToWin();
             numOfPlayers = reader.getNumOfPlayers();
             //Test commands to verify if the properties file works
             // System.out.println(winningCondition);
             // System.out.println(numOfPlayers);
-            
+
             System.out.println("Config.properties File found!");
             System.out.println("Initializing Game configuration properties");
             System.out.printf("Number of Prestige points to win: %d \n", winningCondition);
@@ -70,7 +73,7 @@ public class Game {
 
             // Call the method on the instance
         } catch ( Exception e){
-                System.out.println("Cant find file");
+            System.out.println("Cant find file");
         }
         // If no config properties is found
         if (winningCondition == 0){
@@ -78,15 +81,15 @@ public class Game {
             System.out.println("File not found.. Default winning Condition set to 15");
         }
 
-        while (numOfPlayers == 0) {
+        while (numOfPlayers <= 0) {
             System.out.print("Enter number of players: ");
-            numOfPlayers = sc.nextInt();
+            numOfPlayers = InputSafetyChecking.safeInt(sc, "Enter a number: ");
             sc.nextLine();
-            if (numOfPlayers == 0) {
+            if (numOfPlayers <= 0) {
                 System.out.println("At least 1 player needed");
                 continue;
             }
-            
+
         }
 
         if (numOfPlayers > 0){
@@ -107,48 +110,47 @@ public class Game {
             playVsPlayer();
 
         }
-        
-        
+
         TokenBank tb = new TokenBank(numOfPlayers);
         DevelopmentCardDeck developmentDesk = new DevelopmentCardDeck();
         DevelopmentCardFaceUP developmentFaceUp = new DevelopmentCardFaceUP(developmentDesk);
         //need to print remaining cards in decks
 
-        NobleDeck nobleDeck = new NobleDeck();  
-        NobleFaceUP nobleFaceUp = new NobleFaceUP(nobleDeck, numOfPlayers);    // change 4 to amt of players later           
+        NobleDeck nobleDeck = new NobleDeck();
+        NobleFaceUP nobleFaceUp = new NobleFaceUP(nobleDeck, numOfPlayers); // change 4 to amt of players later
         NobleAttractService nobleService = new NobleAttractService();
 
         boolean end = false;
+        boolean lastRoundTriggered = false;
+        int finalRoundStarterIndex = -1; // Player how first tiggered the final round
+
         while (!end) {
-            for (Player player : players) { 
+            for (int i = 0; i < players.size(); i++) {
+                Player player = players.get(i);
+                if (lastRoundTriggered && i == finalRoundStarterIndex) {
+                    end = true;
+                    break;
+                }
                 System.out.println();
                 System.out.println();
                 System.out.println();
                 System.out.println(player.getName().toUpperCase() + "'s turn");
-                turnDisplay(players, player, tb, nobleDeck, nobleFaceUp, developmentFaceUp);
+                turnDisplay(players, player, tb, nobleFaceUp, developmentFaceUp);
 
                 if (player instanceof Computer computer) {
-                    end = computer.turnAlgorithm(tb, developmentFaceUp, developmentDesk, winningCondition, nobleDeck);
+                    boolean reached = computer.turnAlgorithm(tb, developmentFaceUp, developmentDesk, winningCondition,
+                            nobleFaceUp);
+                    if (!lastRoundTriggered && reached) {
+                        lastRoundTriggered = true;
+                        finalRoundStarterIndex = i;
+                    }
                 } else {
                     boolean quit = false;
                     boolean valid = false;
                     while (!valid) {
                         choiceMsg();
-                        
-                        int choice = 0;
-                        boolean choiceValid = false;
-                        while(!choiceValid){
-                            try {
-                                choice = sc.nextInt();
-                                choiceValid = true;
-                            } catch (InputMismatchException e){
-                                System.out.println("Input a number!");
-                                sc.nextLine(); // clear the invalid input
-                                choiceMsg();
-                            }
-                        }
-                        
-                        sc.nextLine();
+
+                        int choice = InputSafetyChecking.readIntInRange(sc, 1, 5, "");
 
                         switch (choice) {
                             default:
@@ -166,7 +168,7 @@ public class Game {
                             case 3:
                                 valid = buyCard(sc, tb, player, developmentFaceUp, developmentDesk);
                                 break;
-                        
+
                             case 4:
                                 valid = reserveCard(sc, tb, player, developmentFaceUp, developmentDesk);
                                 break;
@@ -179,8 +181,8 @@ public class Game {
                                     end = true;
                                     quit = true;
                                     valid = true;
-                                } 
-                            }
+                                }
+                        }
                     }
 
                     if (quit) {
@@ -188,8 +190,14 @@ public class Game {
                     }
 
                     if (valid) {
-                        end = endTurn(sc, player, winningCondition, tb);
-                        awardNobleIfAny(nobleService, player, nobleDeck, sc);
+                        handleDiscard(sc, player, tb);
+                        awardNobleIfAny(nobleService, player, nobleFaceUp, sc);
+
+                        if (!lastRoundTriggered && reachedWinningCondition(player, winningCondition)) {
+                            System.out.println("Player reached winning condition, final round triggered.");
+                            lastRoundTriggered = true;
+                            finalRoundStarterIndex = i;
+                        }
                     }
                 }
             }
@@ -197,103 +205,120 @@ public class Game {
         determineWinner(players);
     }
 
-        //-----------------------------------------------------------------------------------------------------------------
-        private static void turnDisplay(ArrayList<Player> players, Player player, TokenBank tb, NobleDeck nobleDeck, NobleFaceUP nobleFaceUp, DevelopmentCardFaceUP developmentFaceUp) {
-            System.out.println("\n==============================");
-            System.out.println("BANK: ");
-            tb.printBank();
+    //------------------------------------------------------------------------------------------------------------------------------------------------------------
+    private static void turnDisplay(ArrayList<Player> players, Player player, TokenBank tb, NobleFaceUP nobleFaceUp, DevelopmentCardFaceUP developmentFaceUp) {
+        System.out.println("\n==============================");
+        System.out.println("BANK: ");
+        tb.printBank();
 
+        System.out.println();
+        System.out.println("PLAYER: ");
+        player.printStatus();
+
+        System.out.println();
+        nobleFaceUp.printMarket();
+
+        System.out.println();
+        developmentFaceUp.printMarket();
+
+        System.out.println("All Player's Inventories:");
+        for (Player p : players) {
             System.out.println();
-            System.out.println("PLAYER: ");
-            player.printStatus();
-
-            System.out.println();
-            nobleFaceUp.printMarket();
-
-            System.out.println();
-            developmentFaceUp.printMarket();
-
-            System.out.println("All Player's Inventories:");
-            for (Player p : players) {
-                System.out.println();
-                System.out.println(p.getName());
-                p.printStatus();
-            }
+            System.out.println(p.getName());
+            p.printStatus();
         }
+    }
 
-        //-----------------------------------------------------------------------------------------------------------------
-        private static boolean endTurn(Scanner sc, Player player, int winningCondition, TokenBank tb) {
-            while (player.totalTokens() > 10) {
-                System.out.println("Total tokens exceeded 10. Pick one color to discard: ");
-                String color = sc.nextLine();
-                player.removeTokens(color, 1);
-                tb.add(color, 1);
+    //-----------------------------------------------------------------------------------------------------------------
+    private static boolean handleDiscard(Scanner sc, Player player, TokenBank tb) {
+        while (player.totalTokens() > 10) {
+            System.out.println("Total tokens exceeded 10. Pick one color to discard: ");
+            String color = sc.nextLine().trim().toUpperCase();
+            if (!isTokenColor(color)) {
+                System.out.println("Invalid color.");
+                continue;
             }
-            if (player.getPoints() >= winningCondition) {
-                System.out.println("Player reached winning condition, last turn");
-                return true;
+            if (player.getTokens(color) <= 0) {
+                System.out.println("You do not have any " + color + " tokens.");
+                continue;
             }
+            player.removeTokens(color, 1);
+            tb.add(color, 1);
+        }
+        return true;
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------
+    private static boolean reachedWinningCondition(Player player, int winningCondition) {
+        return player.getPoints() >= winningCondition;
+    }
+
+    //---------------------------------------------------------------------------------------------------------------------
+    private static void awardNobleIfAny(NobleAttractService service, Player player, NobleFaceUP faceUp, Scanner sc) {
+        Noble gained = service.awardNobleIfPossible(player, faceUp, sc);
+        if (gained != null) {
+            System.out.println("Noble gained: " + gained);
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    private static boolean takeThreeTokens(Scanner sc, TokenBank tb, Player player) {
+
+        if (player.totalTokens() + 3 > 10) {
+            System.out.println("You cannot take 3 tokens because you would exceed 10 tokens.");
             return false;
         }
 
-        //-----------------------------------------------------------------------------------------------------------------
-        private static void awardNobleIfAny(NobleAttractService service, Player player, NobleDeck deck, Scanner sc) {
-            Noble gained = service.awardNobleIfPossible(player, deck, sc);
-            if (gained != null) {
-                System.out.println("Noble gained: " + gained);
-            }
-        }
-
-        //-----------------------------------------------------------------------------------------------------------------
-        private static boolean takeThreeTokens(Scanner sc, TokenBank tb, Player player) {
-
-            if (player.totalTokens() + 3 > 10) {
-                System.out.println("You cannot take 3 tokens because you would exceed 10 tokens.");
-                return false;
-            }
-
+        List<String> colors = null;
+        while (colors == null) {
             System.out.println("Enter 3 DIFFERENT colors (WHITE/BLUE/GREEN/RED/BLACK) separated by spaces:");
             System.out.print("> ");
-            String a = sc.next().toUpperCase();
-            String b = sc.next().toUpperCase();
-            String c = sc.next().toUpperCase();
-
-            HashSet<String> set = new HashSet<>();
-            set.add(a);
-            set.add(b);
-            set.add(c);
-
-            if (set.size() != 3) {
-                System.out.println("Must choose 3 different colors.");
-                return false;
+            colors = InputSafetyChecking.parseThreeColorsFlexibly(sc.nextLine(), TAKE_COLORS);
+            if (colors == null) {
+                System.out.println("Please enter valid colors.");
             }
-            if (a.equals(TokenBank.GOLD) || b.equals(TokenBank.GOLD) || c.equals(TokenBank.GOLD)) {
-                System.out.println("You cannot take GOLD using this action.");
-                return false;
-            }
-
-            for (String color : set) {
-                if (!isTakeColor(color)) {
-                    System.out.println("Invalid color: " + color);
-                    return false;
-                }
-                if (!tb.hasEnough(color, 1)) {
-                    System.out.println("Bank does not have enough " + color);
-                    return false;
-                }
-            }
-
-            System.out.print("Player has taken ");
-            for (String color : set) {
-                tb.remove(color, 1);
-                player.addTokens(color, 1);
-                System.out.print(color + " ");
-            }
-
-            System.out.print("tokens.");
-            return true;
         }
-    
+        String a = colors.get(0);
+        String b = colors.get(1);
+        String c = colors.get(2);
+
+        HashSet<String> set = new HashSet<>();
+        set.add(a);
+        set.add(b);
+        set.add(c);
+
+        if (set.size() != 3) {
+            System.out.println("Must choose 3 different colors.");
+            return false;
+        }
+        if (a.equals(TokenBank.GOLD) || b.equals(TokenBank.GOLD) || c.equals(TokenBank.GOLD)) {
+            System.out.println("You cannot take GOLD using this action.");
+            return false;
+        }
+
+        for (String color : set) {
+            String matched = InputSafetyChecking.matchColor(color, 0);
+            if (matched == null || matched.length() != color.length()) {
+                System.out.println("Invalid color: " + color);
+                return false;
+            }
+            if (!tb.hasEnough(color, 1)) {
+                System.out.println("Bank does not have enough " + color);
+                return false;
+            }
+        }
+
+        System.out.print("Player has taken ");
+        for (String color : set) {
+            tb.remove(color, 1);
+            player.addTokens(color, 1);
+            System.out.print(color + " ");
+        }
+
+        System.out.print("tokens.");
+        return true;
+    }
+
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private static boolean takeTwoTokens(Scanner sc, TokenBank tb, Player player) {
         if (player.totalTokens() + 2 > 10) {
@@ -301,17 +326,22 @@ public class Game {
             return false;
         }
 
-        System.out.println("Enter a color (WHITE/BLUE/GREEN/RED/BLACK):");
-        System.out.print("> ");
-        String color = sc.nextLine().toUpperCase();
+        String color = "";
+        while (true) {
+            System.out.println("Enter a color (WHITE/BLUE/GREEN/RED/BLACK):");
+            System.out.print("> ");
+            color = InputSafetyChecking.normalizeUpper(sc.nextLine());
+
+            String matched = InputSafetyChecking.matchColor(color, 0);
+            if (matched == null || matched.length() != color.length()) {
+                System.out.println("Please enter valid color.");
+                continue;
+            }
+            break;
+        }
 
         if (color.equals(TokenBank.GOLD)) {
             System.out.println("You cannot take GOLD using this action.");
-            return false;
-        }
-
-        if (!isTakeColor(color)) {
-            System.out.println("Invalid color: " + color);
             return false;
         }
 
@@ -319,16 +349,15 @@ public class Game {
             System.out.println("Bank does not have at least 4 " + color);
             return false;
         }
-        
+
         tb.remove(color, 2);
         player.addTokens(color, 2);
-        
 
         System.out.println("Player has taken 2 " + color + " tokens");
         return true;
 
-
     }
+
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private static void determineWinner(ArrayList<Player> players) {
         ArrayList<Player> winner = new ArrayList<>();
@@ -354,13 +383,14 @@ public class Game {
             }
             System.out.print("!");
         }
-        
+
     }
 
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    private static boolean buyCard(Scanner sc, TokenBank tb, Player player, DevelopmentCardFaceUP developmentFaceUp, DevelopmentCardDeck developmentDesk) {
+    private static boolean buyCard(Scanner sc, TokenBank tb, Player player, DevelopmentCardFaceUP developmentFaceUp,
+            DevelopmentCardDeck developmentDesk) {
         System.out.print("Enter location of card (Reserve / Market): ");
-        String location = sc.nextLine().toLowerCase();
+        String location = sc.nextLine().trim().toLowerCase();
 
         DevelopmentCard chosen = null;
         int level = 0;
@@ -372,7 +402,7 @@ public class Game {
             }
 
             System.out.print("Enter index of card (0-2): ");
-            index = sc.nextInt();
+            index = InputSafetyChecking.safeInt(sc, "Enter a number: ");
             sc.nextLine();
             try {
                 chosen = player.getReserveCard(index);
@@ -383,22 +413,21 @@ public class Game {
         } else if (location.equals("market")) {
             try {
                 System.out.print("Choose level (1/2/3): ");
-                level = safeInt(sc);
+                level = InputSafetyChecking.safeInt(sc, "Enter a number: ");
 
                 System.out.print("Choose card index: ");
-                index = safeInt(sc);
-                
+                index = InputSafetyChecking.safeInt(sc, "Enter a number: ");
+
                 chosen = developmentFaceUp.getCard(level, index);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 return false;
             }
-            
+
         } else {
             System.out.println("Invalid location");
             return false;
         }
-        
 
         try {
             if (!PurchaseService.canBuy(player, chosen)) {
@@ -407,7 +436,7 @@ public class Game {
             }
 
             PurchaseService.buy(player, chosen, tb);
-            if (location.equals("Reserve")) {
+            if (location.equals("reserve")) {
                 player.buyReserve(chosen);
             } else {
                 developmentFaceUp.removeAndRefill(level, index, developmentDesk);
@@ -422,7 +451,8 @@ public class Game {
     }
 
     //--------------------------------------------------------------------------------------------------------
-    private static boolean reserveCard(Scanner sc, TokenBank tb, Player player, DevelopmentCardFaceUP developmentFaceUp, DevelopmentCardDeck developmentDesk) {
+    private static boolean reserveCard(Scanner sc, TokenBank tb, Player player, DevelopmentCardFaceUP developmentFaceUp,
+            DevelopmentCardDeck developmentDesk) {
         if (player.totalReserves() == 3) {
             System.out.println("Reserve full");
             return false;
@@ -431,12 +461,17 @@ public class Game {
         System.out.println("Option a: draw first card from any deck");
         System.out.println("Option b: choose a face up card");
         System.out.print("Your Choice: ");
-        char choice = sc.nextLine().charAt(0);
+        String reserveLine = sc.nextLine().trim().toLowerCase();
+        if (reserveLine.isEmpty()) {
+            System.out.println("invalid choice");
+            return false;
+        }
+        char choice = reserveLine.charAt(0);
 
         DevelopmentCard chosen = null;
         if (choice == 'a') {
             System.out.print("enter level: ");
-            int level = sc.nextInt();
+            int level = InputSafetyChecking.safeInt(sc, "Enter a number: ");
             sc.nextLine();
             switch (level) {
                 default:
@@ -471,11 +506,11 @@ public class Game {
             int index = 0;
             try {
                 System.out.print("Choose level (1/2/3): ");
-                level = safeInt(sc);
+                level = InputSafetyChecking.safeInt(sc, "Enter a number: ");
 
                 System.out.print("Choose card index: ");
-                index = safeInt(sc);
-                
+                index = InputSafetyChecking.safeInt(sc, "Enter a number: ");
+
                 chosen = developmentFaceUp.getCard(level, index);
                 developmentFaceUp.removeAndRefill(level, index, developmentDesk);
             } catch (Exception e) {
@@ -483,16 +518,15 @@ public class Game {
                 return false;
             }
 
-            
-        } else {    
+        } else {
             System.out.println("invalid choice");
             return false;
         }
 
         player.addReserve(chosen);
-        if (tb.get("GOLD") > 0) {
-            tb.remove("GOLD", 1);
-            player.addTokens("GOLD", 1);
+        if (tb.get(TokenBank.GOLD) > 0) {
+            tb.remove(TokenBank.GOLD, 1);
+            player.addTokens(TokenBank.GOLD, 1);
             System.out.println("Gold token added to inventory");
         } else {
             System.out.println("No remaining gold tokens");
@@ -502,20 +536,13 @@ public class Game {
         return true;
     }
 
-
-    //--------------------------------------------------------------------------------------------------------
-    private static boolean isTakeColor(String c) {
-        for (String color : TAKE_COLORS) {
-            if (color.equals(c)) return true;
-        }
-        return false;
-    }
-
-    private static int safeInt(Scanner sc) {
-        while (!sc.hasNextInt()) {
-            sc.next();
-            System.out.print("Enter a number: ");
-        }
-        return sc.nextInt();
+    // --------------------------------------------------------------------------------------------------------
+    private static boolean isTokenColor(String c) {
+        return TokenBank.WHITE.equals(c)
+                || TokenBank.BLUE.equals(c)
+                || TokenBank.GREEN.equals(c)
+                || TokenBank.RED.equals(c)
+                || TokenBank.BLACK.equals(c)
+                || TokenBank.GOLD.equals(c);
     }
 }

@@ -18,7 +18,7 @@ public class TokenBank{
     public static final String BLACK = "BLACK";
     public static final String GOLD = "GOLD";
 
-    // List of tokens, which store the color of the token and the token object. 
+    // List of tokens, which store the color of the token and the token object.
     private HashMap<String, Token> tokens;
 
     public TokenBank(int numOfPlayers) {
@@ -36,7 +36,7 @@ public class TokenBank{
         //takes a predetermine number of tokens from the properties file
         try{
             Reader reader = new Reader();
-             // Create an instance of Reader
+            // Create an instance of Reader
             customTokenMode = reader.getCustomTokenMode();
             if (customTokenMode == 1){
                 white = reader.getColourToken("WHITE");
@@ -46,10 +46,10 @@ public class TokenBank{
                 black = reader.getColourToken("BLACK");
                 gold = reader.getColourToken("GOLD");
             }
-            System.out.println("Num of Cards properties  found!");
+            System.out.println("Num of Cards properties found!");
             // Call the method on the instance
         } catch ( Exception e){
-                System.out.println("Cant find file");
+            System.out.println("Cant find file");
         }
         if (customTokenMode == 0){
             switch(numOfPlayers) {
@@ -60,6 +60,7 @@ public class TokenBank{
                     tokens.put(RED, new Token(RED, 4));
                     tokens.put(BLACK, new Token(BLACK, 4));
                     tokens.put(GOLD, new Token(GOLD, 5));
+                    break;
                 case 3:
                     tokens.put(WHITE, new Token(WHITE, 5));
                     tokens.put(BLUE, new Token(BLUE, 5));
@@ -67,6 +68,7 @@ public class TokenBank{
                     tokens.put(RED, new Token(RED, 5));
                     tokens.put(BLACK, new Token(BLACK, 5));
                     tokens.put(GOLD, new Token(GOLD, 5));
+                    break;
                 default:
                     tokens.put(WHITE, new Token(WHITE, 7));
                     tokens.put(BLUE, new Token(BLUE, 7));
@@ -74,7 +76,7 @@ public class TokenBank{
                     tokens.put(RED, new Token(RED, 7));
                     tokens.put(BLACK, new Token(BLACK, 7));
                     tokens.put(GOLD, new Token(GOLD, 5));
-            } 
+            }
         }
         if (customTokenMode == 1){
             tokens.put(WHITE, new Token(WHITE, white));
@@ -82,15 +84,13 @@ public class TokenBank{
             tokens.put(GREEN, new Token(GREEN, green));
             tokens.put(RED, new Token(RED, red));
             tokens.put(BLACK, new Token(BLACK, black));
-            tokens.put(GOLD, new Token(GOLD, gold)); 
+            tokens.put(GOLD, new Token(GOLD, gold));
         }
-    
-        
     }
 
     // Getter, get the amount of the specific color token in the bank
     // get(color) is the method to get the token Object with the color we want
-    // getAmount() is the method in the token class to get the Amount of that token object. 
+    // getAmount() is the method in the token class to get the Amount of that token object.
     public int get(String color) {
         return tokens.get(color).getAmount();
     }

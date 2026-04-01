@@ -10,15 +10,17 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import Cards.Noble.Noble;
-import Cards.Noble.NobleDeck;
+import Cards.Noble.NobleFaceUP;
+import Test.InputSafetyChecking;
 
 public class NobleAttractService {
 
     // Awards One noble to the player if possible.
     // return the Noble awarded, or null if player qualifies for nothing.
 
-    public Noble awardNobleIfPossible(Player player, NobleDeck deck, Scanner sc) {
-        ArrayList<Noble> eligible = deck.getAttractableNobles(player);
+    public Noble awardNobleIfPossible(Player player, NobleFaceUP nobleFaceUp, Scanner sc) {
+        NobleService nobleService = new NobleService();
+        ArrayList<Noble> eligible = nobleService.getEligibleNobles(player, nobleFaceUp);
 
         if (eligible.isEmpty()) {
             return null;
@@ -31,8 +33,7 @@ public class NobleAttractService {
             chosen = chooseOne(eligible, sc); // If multiple nobles player choose, invoke the helper method
         }
 
-        player.addNobles(chosen);
-        deck.removeNoble(chosen);
+        nobleService.awardChosenNoble(player, nobleFaceUp, chosen);
         return chosen;
     }
 
@@ -54,20 +55,6 @@ public class NobleAttractService {
     // like if a player have 4 nobles then their input must between 0 to 3
     // keep prompt the player until they put a correct number.
     private int readIndex(Scanner sc, int size) {
-        while (true) {
-            System.out.print("Enter choice (0-" + (size - 1) + "): ");
-
-            if (sc.hasNextInt()) {
-                int x = sc.nextInt();
-                sc.nextLine(); // consume newline
-                if (x >= 0 && x < size) {
-                    return x;
-                }
-            } else {
-                sc.nextLine(); // discard invalid input, continue prompting the player
-            }
-
-            System.out.println("Invalid choice, try again.");
-        }
+        return InputSafetyChecking.readIntInRange(sc, 0, size - 1, "Enter choice (0-" + (size - 1) + "): ");
     }
 }

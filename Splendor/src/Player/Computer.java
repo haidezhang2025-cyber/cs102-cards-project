@@ -30,7 +30,7 @@ public class Computer extends Player {
      * @param NobleDeck nobles currently on the table
      * @return a Boolean value indicating whether Computer has reached the winning condition or not
      */
-    public boolean turnAlgorithm(TokenBank tb, DevelopmentCardFaceUP developmentFaceUp, DevelopmentCardDeck developmentDesk, int winningCondition, NobleDeck nobleDeck) {
+    public boolean turnAlgorithm(TokenBank tb, DevelopmentCardFaceUP developmentFaceUp, DevelopmentCardDeck developmentDesk, int winningCondition, NobleFaceUP nobleFaceUp) {
 
         boolean valid = false;
 
@@ -54,13 +54,22 @@ public class Computer extends Player {
             valid = computerReserveCard(tb, developmentFaceUp, developmentDesk);
         }
 
-        // end turn
-        boolean end = computerEndTurn(tb, winningCondition);
+        // The correct order should be check if the computer can attract nobles before enter into final round
+        // even though the computer may have prestigious point >= 15 but we still need to check all the possible 
+        // game action before enter into the final round.
 
-        // award noble if any
-        computerAwardNobleIfAny(nobleDeck);
-        
-        return end;
+        // end turn discard cleanup
+        computerEndTurn(tb);
+
+        // award noble if any before winning check
+        computerAwardNobleIfAny(nobleFaceUp);
+
+        if (this.getPoints() >= winningCondition){
+            System.out.println("Computer reached winning condition, final round");
+            return true;
+        }
+
+        return false;
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -81,6 +90,7 @@ public class Computer extends Player {
             try {
                 currCard = this.getReserveCard(index);
                 if (PurchaseService.canBuy(this, currCard)) {
+                    PurchaseService.buy(this, currCard, tb);
                     this.buyReserve(currCard);
                     System.out.println("Bought card: " + currCard);
                     return true;
@@ -163,7 +173,7 @@ public class Computer extends Player {
                 }
                 randomizedTokenColorsIndex++;
             }
-            
+
             if (color != null) {
                 System.out.print("Computer has taken 2 " + color + " tokens.");
                 tb.remove(color, 2);
@@ -223,7 +233,7 @@ public class Computer extends Player {
      * @param winningCondition amount of points needed to win
      * @return a Boolean value indicating whether Computer has reached the winning condition or not
      */
-    private boolean computerEndTurn(TokenBank tb, int winningCondition) {
+    private void computerEndTurn(TokenBank tb) {
         while (this.totalTokens() > 10) {
             // remove random token
             Collections.shuffle(randomizedTokenColors);
@@ -237,19 +247,15 @@ public class Computer extends Player {
             this.removeTokens(color, 1);
             tb.add(color, 1);
         }
-        if (this.getPoints() >= winningCondition) {
-            System.out.println("Computer reached winning condition, last turn");
-            return true;
-        }
-        return false;
     }
 
     /**
      * Test.Game::awardNobleIfAny, but adjusted for the Computer class.
      * @param deck nobles currently on the table
      */
-    private void computerAwardNobleIfAny(NobleDeck deck) {
-        ArrayList<Noble> eligible = deck.getAttractableNobles(this);
+    private void computerAwardNobleIfAny(NobleFaceUP nobleFaceUp) {
+        NobleService nobleService = new NobleService();
+        ArrayList<Noble> eligible = nobleService.getEligibleNobles(this, nobleFaceUp);
 
         if (eligible.isEmpty()) {
             return;
@@ -257,8 +263,7 @@ public class Computer extends Player {
 
         Noble chosen = eligible.get(0);     // gets first eligible noble no matter what
 
-        this.addNobles(chosen);
-        deck.removeNoble(chosen);
+        nobleService.awardChosenNoble(this, nobleFaceUp, chosen);
 
         System.out.println("Noble gained: " + chosen);
     }
