@@ -19,21 +19,24 @@ public class Computer extends Player {
     /**
      * Executes the Computer's turn by doing these steps:
      * 1. Looks for development cards it can buy
-     *      1a. Looks through reserve
-     *      1b. Looks through market
+     * 1a. Looks through reserve
+     * 1b. Looks through market
      * 2. If cannot buy development cards, takes three random tokens
      * 3. If cannot take three tokens, takes two tokens
      * 4. If cannot take two tokens, reserve a development card
      * 5. Ends the turn
      * 6. If is eligible for a noble, takes a noble
-     * @param tb the token bank
+     * 
+     * @param tb                the token bank
      * @param developmentFaceUp development cards currently face up on the table
-     * @param developmentDesk the current deck of development cards
-     * @param winningCondition amount of points needed to win
-     * @param NobleDeck nobles currently on the table
-     * @return a Boolean value indicating whether Computer has reached the winning condition or not
+     * @param developmentDesk   the current deck of development cards
+     * @param winningCondition  amount of points needed to win
+     * @param NobleDeck         nobles currently on the table
+     * @return a Boolean value indicating whether Computer has reached the winning
+     *         condition or not
      */
-    public boolean turnAlgorithm(TokenBank tb, DevelopmentCardFaceUP developmentFaceUp, DevelopmentCardDeck developmentDesk, int winningCondition, NobleFaceUP nobleFaceUp) {
+    public boolean turnAlgorithm(TokenBank tb, DevelopmentCardFaceUP developmentFaceUp,
+            DevelopmentCardDeck developmentDesk, int winningCondition, NobleFaceUP nobleFaceUp) {
 
         boolean valid = false;
 
@@ -57,8 +60,10 @@ public class Computer extends Player {
             valid = computerReserveCard(tb, developmentFaceUp, developmentDesk);
         }
 
-        // The correct order should be check if the computer can attract nobles before enter into final round
-        // even though the computer may have prestigious point >= 15 but we still need to check all the possible
+        // The correct order should be check if the computer can attract nobles before
+        // enter into final round
+        // even though the computer may have prestigious point >= 15 but we still need
+        // to check all the possible
         // game action before enter into the final round.
 
         // end turn discard cleanup
@@ -67,7 +72,7 @@ public class Computer extends Player {
         // award noble if any before winning check
         computerAwardNobleIfAny(nobleFaceUp);
 
-        if (this.getPoints() >= winningCondition){
+        if (this.getPoints() >= winningCondition) {
             System.out.println("Computer reached winning condition, final round");
             return true;
         }
@@ -75,47 +80,41 @@ public class Computer extends Player {
         return false;
     }
 
-    //-----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Test.Game::buyCard, but adjusted for the Computer class.
-     * Iterates through each card in its reserve then in the market to find one it can afford.
-     * @param tb the token bank
+     * Iterates through each card in its reserve then in the market to find one it
+     * can afford.
+     * 
+     * @param tb                the token bank
      * @param developmentFaceUp development cards currently face up on the table
-     * @param developmentDesk the current deck of development cards
-     * @return a Boolean value indicating whether Computer has successfully bought a card or not
+     * @param developmentDesk   the current deck of development cards
+     * @return a Boolean value indicating whether Computer has successfully bought a
+     *         card or not
      */
     private boolean computerBuyCard(TokenBank tb, DevelopmentCardFaceUP developmentFaceUp, DevelopmentCardDeck developmentDesk) {
-        DevelopmentCard currCard = null;
-
         // from reserve
         for (int index = 0; index < this.totalReserves(); index++) {
-            try {
-                currCard = this.getReserveCard(index);
-                if (PurchaseService.canBuy(this, currCard)) {
-                    PurchaseService.buy(this, currCard, tb);
-                    this.buyReserve(currCard);
-                    System.out.println("Bought card: " + currCard);
-                    return true;
-                }
-            } catch (Exception e) {
-                continue;
+            DevelopmentCard currCard = this.getReserveCard(index);
+            if (PurchaseService.canBuy(this, currCard)) {
+                PurchaseService.buy(this, currCard, tb);
+                this.buyReserve(currCard);
+                System.out.println("Bought card: " + currCard);
+                return true;
             }
         }
 
         // from market
-        for (int level = 3; level >= 1; level--) {
-            for (int index = 0; index <= 3; index++) {
-                try {
-                    currCard = developmentFaceUp.getCard(level, index);
-                    if (PurchaseService.canBuy(this, currCard)) {
-                        PurchaseService.buy(this, currCard, tb);
-                        developmentFaceUp.removeAndRefill(level, index, developmentDesk);
-                        System.out.println("Bought card: " + currCard);
-                        return true;
-                    }
-                } catch (Exception e) {
-                    continue;
+        for (int level = 3; level >= 1; level--){
+            ArrayList<DevelopmentCard> row = developmentFaceUp.getFaceUp(level);
+            for (int index = 0; index < row.size(); index++) {
+                DevelopmentCard currCard = developmentFaceUp.getCard(level, index);
+                if (PurchaseService.canBuy(this, currCard)) {
+                    PurchaseService.buy(this, currCard, tb);
+                    developmentFaceUp.removeAndRefill(level, index, developmentDesk);
+                    System.out.println("Bought card: " + currCard);
+                    return true;
                 }
             }
         }
@@ -125,8 +124,10 @@ public class Computer extends Player {
     /**
      * Test.Game::takeThreeTokens, but adjusted for the Computer class.
      * Takes three random tokens.
+     * 
      * @param tb the token bank
-     * @return a Boolean value indicating whether Computer has successfully taken three tokens or not
+     * @return a Boolean value indicating whether Computer has successfully taken
+     *         three tokens or not
      */
     private boolean computerTakeThreeTokens(TokenBank tb) {
         Collections.shuffle(randomizedTokenColors);
@@ -143,7 +144,7 @@ public class Computer extends Player {
             }
             randomizedTokenColorsIndex++;
         }
-        // means there's 3 colors Computer are allowed to take, therefore taking three tokens is valid
+        // Computer are allowed to take 3 different color tokens
         if (colors[2] != null) {
             System.out.print("Computer has taken ");
             for (String color : colors) {
@@ -160,16 +161,18 @@ public class Computer extends Player {
     /**
      * Test.Game::takeTwoTokens, but adjusted for the Computer class.
      * Takes two tokens of a random color.
+     * 
      * @param tb the token bank
-     * @return a Boolean value indicating whether Computer has successfully taken two tokens or not
+     * @return a Boolean value indicating whether Computer has successfully taken
+     *         two tokens or not
      */
-    private boolean computerTakeTwoTokens(TokenBank tb) {
+    private boolean computerTakeTwoTokens(TokenBank tb){
         Collections.shuffle(randomizedTokenColors);
         String color = null;
         int randomizedTokenColorsIndex = 0;
-        while (randomizedTokenColorsIndex < randomizedTokenColors.size()) {
+        while (randomizedTokenColorsIndex < randomizedTokenColors.size()){
             String currColor = randomizedTokenColors.get(randomizedTokenColorsIndex);
-            if (tb.hasEnough(currColor, 4)) {
+            if (tb.hasEnough(currColor, 4)){
                 color = currColor;
                 break;
             }
@@ -187,11 +190,14 @@ public class Computer extends Player {
 
     /**
      * Test.Game::reserveCard, but adjusted for the Computer class.
-     * Tries to reserve the card in market level 1 index 0, then market level 2 index 0, then market level 3 index 0.
-     * @param tb the token bank
+     * Tries to reserve the card in market level 1 index 0, then market level 2
+     * index 0, then market level 3 index 0.
+     * 
+     * @param tb                the token bank
      * @param developmentFaceUp development cards currently face up on the table
-     * @param developmentDesk the current deck of development cards
-     * @return a Boolean value indicating whether Computer has successfully reserved a card or not
+     * @param developmentDesk   the current deck of development cards
+     * @return a Boolean value indicating whether Computer has successfully reserved
+     *         a card or not
      */
     private boolean computerReserveCard(TokenBank tb, DevelopmentCardFaceUP developmentFaceUp, DevelopmentCardDeck developmentDesk) {
         if (this.totalReserves() == 3) {
@@ -201,13 +207,13 @@ public class Computer extends Player {
         DevelopmentCard chosen = null;
         // try reserving index 0 of each level
         for (int level = 1; level <= 3; level++) {
-            try {
-                chosen = developmentFaceUp.getCard(level, 0);
-                developmentFaceUp.removeAndRefill(level, 0, developmentDesk);
-                break;
-            } catch (Exception e) {
+            if (developmentFaceUp.getFaceUp(level).isEmpty()) {
                 continue;
             }
+
+            chosen = developmentFaceUp.getCard(level, 0);
+            developmentFaceUp.removeAndRefill(level, 0, developmentDesk);
+            break;
         }
 
         if (chosen == null) {
@@ -215,7 +221,7 @@ public class Computer extends Player {
         }
 
         this.addReserve(chosen);
-        if (tb.get("GOLD") > 0) {
+        if (tb.get("GOLD") > 0){
             tb.remove("GOLD", 1);
             this.addTokens("GOLD", 1);
             System.out.println("Gold token added to inventory");
@@ -227,13 +233,15 @@ public class Computer extends Player {
         return true;
     }
 
-    //-----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Test.Game::endTurn, but adjusted for the Computer class.
-     * @param tb the token bank
+     * 
+     * @param tb               the token bank
      * @param winningCondition amount of points needed to win
-     * @return a Boolean value indicating whether Computer has reached the winning condition or not
+     * @return a Boolean value indicating whether Computer has reached the winning
+     *         condition or not
      */
     private void computerEndTurn(TokenBank tb) {
         while (this.totalTokens() > 10) {
@@ -253,9 +261,10 @@ public class Computer extends Player {
 
     /**
      * Test.Game::awardNobleIfAny, but adjusted for the Computer class.
+     * 
      * @param deck nobles currently on the table
      */
-    private void computerAwardNobleIfAny(NobleFaceUP nobleFaceUp) {
+    private void computerAwardNobleIfAny(NobleFaceUP nobleFaceUp){
         NobleService nobleService = new NobleService();
         ArrayList<Noble> eligible = nobleService.getEligibleNobles(this, nobleFaceUp);
 
@@ -263,7 +272,7 @@ public class Computer extends Player {
             return;
         }
 
-        Noble chosen = eligible.get(0);     // gets first eligible noble no matter what
+        Noble chosen = eligible.get(0); // gets first eligible noble no matter what
 
         nobleService.awardChosenNoble(this, nobleFaceUp, chosen);
 
