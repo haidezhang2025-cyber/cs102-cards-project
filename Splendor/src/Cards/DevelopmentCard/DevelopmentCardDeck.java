@@ -1,5 +1,5 @@
-/*
-This DevelopmentCardDesk class store and manage all the development cards
+/**
+This DevelopmentCardDeck class stores and manages all the development cards
 */
 package Cards.DevelopmentCard;
 
@@ -17,20 +17,31 @@ public class DevelopmentCardDeck {
     private ArrayList<DevelopmentCard> level2Deck;
     private ArrayList<DevelopmentCard> level3Deck;
 
+    /**
+     * Initializes and shuffles development card decks by level
+     * Calls methods initialiseCards and shuffleDecks
+     */
     public DevelopmentCardDeck() {
         level1Deck = new ArrayList<>();
         level2Deck = new ArrayList<>();
         level3Deck = new ArrayList<>();
 
-        initialiseCards();
-        shuffleDesks();
-    }
-
-    // Call the constructor in the DevelopementCard to initialise all the 90 cards
-    private void initialiseCards() {
         initializeDeck("src/Data/tier1.csv", level1Deck);
         initializeDeck("src/Data/tier2.csv", level2Deck);
         initializeDeck("src/Data/tier3.csv", level3Deck);
+
+        Collections.shuffle(level1Deck);
+        Collections.shuffle(level2Deck);
+        Collections.shuffle(level3Deck);
+    }
+
+    /**
+     * Initialize cards from csv files
+     */
+    // private void initialiseCards() {
+    //     initializeDeck("src/Data/tier1.csv", level1Deck);
+    //     initializeDeck("src/Data/tier2.csv", level2Deck);
+    //     initializeDeck("src/Data/tier3.csv", level3Deck);
 
     //     int numOfCards = 0;
     //     String tier1DeckDir = null;
@@ -79,9 +90,13 @@ public class DevelopmentCardDeck {
     //         initializeDeck(tier2DeckDir, level2Deck, 20); 
     //         initializeDeck(tier3DeckDir, level2Deck, 10); 
     //     }
-    }
+    //}
 
-    // Helper method to initialize the deck
+    /**
+     * Reads from csv files and creates DevelopmentCard objects
+     * @param fileName name of the csv file
+     * @param deck list of development cards to store DevelopmentCard objects
+     */
     public static void initializeDeck(String fileName, List<DevelopmentCard> deck) {
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
@@ -140,26 +155,45 @@ public class DevelopmentCardDeck {
     // }
     
 
-    // Method in the collection to automatically shuffle the order of the cards for every level.
-    private void shuffleDesks() {
-        Collections.shuffle(level1Deck);
-        Collections.shuffle(level2Deck);
-        Collections.shuffle(level3Deck);
-    }
+    /**
+     * Shuffles the DevelopmentCardDecks in random order
+     */
+    // private void shuffleDecks() {
+    //     Collections.shuffle(level1Deck);
+    //     Collections.shuffle(level2Deck);
+    //     Collections.shuffle(level3Deck);
+    // }
 
-    // Helper function to check if there is enough card in the desk for system to draw cards
+    /**
+     * Checks if level 1 DevelopmentCardDeck is empty
+     * @return true if deck is empty
+     */
     public boolean isLevel1Empty(){ 
         return level1Deck.isEmpty(); 
     }
+
+    /**
+     * Checks if level 2 DevelopmentCardDeck is empty
+     * @return true if deck is empty
+     */
     public boolean isLevel2Empty(){ 
         return level2Deck.isEmpty(); 
     }
+
+    /**
+     * Checks if level 3 DevelopmentCardDeck is empty
+     * @return true if deck is empty
+     */
     public boolean isLevel3Empty(){ 
         return level3Deck.isEmpty(); 
     }
 
 
-    // Method to draw cards to place on the table for each level
+    /**
+     * Draws DevelopmentCard from level 1 DevelopmentCardDeck
+     * @return DevelopmentCardObject at top of deck
+     * @throws IllegalArgumentException if deck is empty
+     */
     public DevelopmentCard drawLevel1(){
         if (isLevel1Empty()) {
             throw new IllegalArgumentException("level 1 development cards are not enough");
@@ -167,6 +201,11 @@ public class DevelopmentCardDeck {
         return level1Deck.remove(0);
     }
 
+    /**
+     * Draws DevelopmentCard from level 2 DevelopmentCardDeck
+     * @return DevelopmentCardObject at top of deck
+     * @throws IllegalArgumentException if deck is empty
+     */
    public DevelopmentCard drawLevel2(){ 
         if (isLevel2Empty()) {
             throw new IllegalArgumentException("level 2 development cards are not enough");
@@ -174,6 +213,11 @@ public class DevelopmentCardDeck {
         return level2Deck.remove(0);
     }
 
+    /**
+     * Draws DevelopmentCard from level 3 DevelopmentCardDeck
+     * @return DevelopmentCardObject at top of deck
+     * @throws IllegalArgumentException if deck is empty
+     */
     public DevelopmentCard drawLevel3(){
         if (isLevel3Empty()) {
             throw new IllegalArgumentException("level 3 development cards are not enough");
@@ -181,13 +225,26 @@ public class DevelopmentCardDeck {
         return level3Deck.remove(0);
     }
 
-    // return the number of remining cards in the desk.
+    /**
+     * Gets the number of remaining cards in the level 1 DevelopmentCardDeck
+     * @return number of remaining cards
+     */
     public int level1Size(){ 
         return level1Deck.size(); 
     }
+
+    /**
+     * Gets the number of remaining cards in the level 2 DevelopmentCardDeck
+     * @return number of remaining cards
+     */
     public int level2Size(){ 
         return level2Deck.size(); 
     }
+
+    /**
+     * Gets the number of remaining cards in the level 3 DevelopmentCardDeck
+     * @return number of remaining cards
+     */
     public int level3Size(){ 
         return level3Deck.size(); 
     }

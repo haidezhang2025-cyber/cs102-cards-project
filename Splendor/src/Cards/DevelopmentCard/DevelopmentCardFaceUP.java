@@ -1,5 +1,5 @@
-/*
-This DevelopmentCardFaceUP class store the 4 development card of each level which are face up on the table for players to purchase. 
+/**
+This DevelopmentCardFaceUP class stores the 4 development cards of each level which are face up on the table for players to purchase. 
 */
 package Cards.DevelopmentCard;
 
@@ -15,6 +15,10 @@ public class DevelopmentCardFaceUP {
 
     // Constructor to call the draw function in the development card desk class and put it into a arraylist with only 4 elements
     // which simulate the action of place the card from the deck to the table
+    /**
+     * Constructor initializes face up cards for each level
+     * @param deck
+     */
     public DevelopmentCardFaceUP(DevelopmentCardDeck deck){
         for (int i = 0; i < 4; i++) {
             faceUp1.add(deck.drawLevel1());
