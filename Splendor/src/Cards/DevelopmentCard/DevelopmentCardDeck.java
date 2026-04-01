@@ -26,12 +26,14 @@ public class DevelopmentCardDeck {
         level2Deck = new ArrayList<>();
         level3Deck = new ArrayList<>();
 
+        //placeholder variables for filepath
         String tier1DeckDir = null;
         String tier2DeckDir = null;
         String tier3DeckDir = null;
         
         try{
             Reader reader = new Reader(); // Create an instance of Reader
+            //calls for the config properties filepaths of the current cards
             tier1DeckDir = reader.getTierDeck(1);
             tier2DeckDir = reader.getTierDeck(2);
             tier3DeckDir = reader.getTierDeck(3);
@@ -40,6 +42,7 @@ public class DevelopmentCardDeck {
         } catch ( Exception e){
                 System.out.println("Cant find file");
         }
+        // initialise the deck
         initializeDeck(tier1DeckDir, level1Deck);
         initializeDeck(tier2DeckDir, level2Deck);
         initializeDeck(tier3DeckDir, level3Deck);
