@@ -217,7 +217,7 @@ public class Controller {
     @FXML
     private void handleReserveCard() {
         currentMode = ActionMode.RESERVE_CARD;
-        statusBarLabel.setText("Click a face-up card to reserve it");
+        statusBarLabel.setText("Click a face-up card to reserve it, then take a gold coin");
     }
 
     @FXML
@@ -457,32 +457,32 @@ public class Controller {
 /* ----------On Clicks------------------------------------ */
     @FXML
     private void onGoldTokenClick() {
-        System.out.println("Gold token clicked");
+        updateStatus(MoveResult.success("Taken Gold Coin"));
     }
 
     @FXML
     private void onGreenTokenClick() {
-        System.out.println("Green token clicked");
+        updateStatus(MoveResult.success("Taken Green Token"));
     }
 
     @FXML
     private void onWhiteTokenClick() {
-        System.out.println("White token clicked");
+        updateStatus(MoveResult.success("Taken White Coin"));
     }
 
     @FXML
     private void onBlackTokenClick() {
-        System.out.println("Black token clicked");
+        updateStatus(MoveResult.success("Taken Black Coin"));
     }
 
     @FXML
     private void onRedTokenClick() {
-        System.out.println("Red token clicked");
+        updateStatus(MoveResult.success("Taken Red Coin"));
     }
 
     @FXML
     private void onBlueTokenClick() {
-        System.out.println("Blue token clicked");
+        updateStatus(MoveResult.success("Taken Blue Coin"));
     }
 
     @FXML
