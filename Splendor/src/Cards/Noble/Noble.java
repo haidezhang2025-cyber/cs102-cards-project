@@ -1,10 +1,12 @@
-/**
- * This Noble class stores the noble object, each noble object has points and cost for each card color.
-*/
+
 package Cards.Noble;
 
 import Cards.AbstractCard.AbstractCard;
 
+/**
+ * The Noble class stores the noble object, each noble object has points and cost for each card color.
+ * Note that the cost of Noble is not tokens, but the number of bonuses collected by a player
+*/
 public class Noble extends AbstractCard {
 
     // Constructor to initialise all the information for individual card

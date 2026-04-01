@@ -1,7 +1,4 @@
-/**
- * This class handle the Noble attraction logic at the end of a player's turn
- * If they qualify for >=1 nobles, they must choose exactly One noble (if multiple, player chooses by themselves).
-*/
+
 
 package Player;
 
@@ -11,11 +8,23 @@ import Test.InputSafetyChecking;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * This class handle the Noble attraction logic at the end of a player's turn.
+ * If they qualify for >=1 nobles, they must choose exactly One noble (if multiple, player chooses by themselves).
+*/
+
 public class NobleAttractService {
 
     // Awards One noble to the player if possible.
     // return the Noble awarded, or null if player qualifies for nothing.
 
+    /**
+     * Returns Noble object awarded to player if player qualifies for a noble, else return null
+     * @param player Player to check
+     * @param nobleFaceUp Deck of face up noble cards
+     * @param sc Scanner
+     * @return Noble object if player eligible, else null
+     */
     public Noble awardNobleIfPossible(Player player, NobleFaceUP nobleFaceUp, Scanner sc){
         NobleService nobleService = new NobleService();
         ArrayList<Noble> eligible = nobleService.getEligibleNobles(player, nobleFaceUp);

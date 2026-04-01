@@ -1,10 +1,10 @@
-/**
- * The DevelopmentCard class stores a single development card object, each development object has bonus color, points, cost for each token color.
-*/
+
 package Cards.DevelopmentCard;
 
 import Cards.AbstractCard.AbstractCard;
-
+/**
+ * The DevelopmentCard class stores a single development card object, each development object has bonus color, points, cost for each token color.
+*/
 public class DevelopmentCard extends AbstractCard {
     private String color;     // color of the bonus token
 

@@ -7,12 +7,22 @@ import Player.*;
 import Properties.Reader;
 import java.util.*;
 
+/**
+ * The Game class contains the main method and some utility methods
+ */
+
 public class Game {
 
+    /**
+     * Array of token colors as constants
+     */
     public static final String[] TAKE_COLORS = {
             TokenBank.WHITE, TokenBank.BLUE, TokenBank.GREEN, TokenBank.RED, TokenBank.BLACK
     };
 
+    /**
+     * Prints menu for player to pick an action for a turn
+     */
     public static void choiceMsg(){
         System.out.println("\nChoose action:");
         System.out.println("1) Take 3 different color tokens");
@@ -23,6 +33,9 @@ public class Game {
         System.out.print("Your choice: ");
     }
 
+    /**
+     * Prints an intro to the game to let player know the game has started
+     */
     public static void playMsg(){
         System.out.println(" ");
         System.out.println("============================================================");
@@ -34,18 +47,33 @@ public class Game {
         System.out.println("============================================================");
     }
 
+    /**
+     * Prints a message to let player know they are against another player
+     */
     public static void playVsPlayer(){
         playMsg();
         System.out.println("                Playing Against the local Player                ");
         System.out.println("============================================================");
     }
 
+    /**
+     * Prints a message to let player know they are against a computer player
+     */
     public static void playVsCom(){
         playMsg();
         System.out.println("                Playing Against the Computer                ");
         System.out.println("============================================================");
     }
 
+    /**
+     * Main method
+     * <p>
+     * Gets inputs for winning condition, number of players.
+     * Initialize card decks.
+     * Run turns for each player until winning condition met or quit.
+     * Determine winner
+     * @param args
+     */
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
 
@@ -206,6 +234,14 @@ public class Game {
     }
 
     //------------------------------------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * Displays information about the tokenBank, player status, face up cards and other players' inventories
+     * @param players arrayList of all players
+     * @param player current player
+     * @param tb tokenBank of all tokens not taken
+     * @param nobleFaceUp face up noble cards
+     * @param developmentFaceUp face up development cards
+     */
     private static void turnDisplay(ArrayList<Player> players, Player player, TokenBank tb, NobleFaceUP nobleFaceUp,
             DevelopmentCardFaceUP developmentFaceUp) {
         System.out.println("\n==============================");
@@ -231,6 +267,13 @@ public class Game {
     }
 
     //-----------------------------------------------------------------------------------------------------------------
+    /**
+     * Returns true when player does not have more than 10 tokens, else prompts user to discard tokens
+     * @param sc Scanner
+     * @param player current player
+     * @param tb tokenBank
+     * @return true
+     */
     private static boolean handleDiscard(Scanner sc, Player player, TokenBank tb) {
         while (player.totalTokens() > 10) {
             System.out.println("Total tokens exceeded 10. Pick one color to discard: ");
@@ -250,11 +293,24 @@ public class Game {
     }
 
     // --------------------------------------------------------------------------------------------------------------------
+    /**
+     * Returns true if player reached the winning condition of prestige points, false otherwise
+     * @param player current player
+     * @param winningCondition number of prestige points to end the game
+     * @return true if player prestige points >= winning condition, false otherwise
+     */
     private static boolean reachedWinningCondition(Player player, int winningCondition) {
         return player.getPoints() >= winningCondition;
     }
 
     //---------------------------------------------------------------------------------------------------------------------
+    /**
+     * Awards Noble object to player if eligible
+     * @param service NobleAttractService
+     * @param player Current player
+     * @param faceUp Face up noble cards
+     * @param sc Scanner
+     */
     private static void awardNobleIfAny(NobleAttractService service, Player player, NobleFaceUP faceUp, Scanner sc) {
         Noble gained = service.awardNobleIfPossible(player, faceUp, sc);
         if (gained != null) {
@@ -263,6 +319,13 @@ public class Game {
     }
 
     //-----------------------------------------------------------------------------------------------------------------
+    /**
+     * Returns true if action to take 3 tokens valid, else false
+     * @param sc Scanner
+     * @param tb TokenBank
+     * @param player Current player
+     * @return true if action valid, false otherwise
+     */
     private static boolean takeThreeTokens(Scanner sc, TokenBank tb, Player player) {
         while (true){
             System.out.println(
@@ -305,6 +368,13 @@ public class Game {
     }
 
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * Returns true if action to take 2 tokens valid, else false
+     * @param sc Scanner
+     * @param tb TokenBank
+     * @param player Current player
+     * @return true if action valid, false otherwise
+     */
     private static boolean takeTwoTokens(Scanner sc, TokenBank tb, Player player) {
         String color = "";
         while (true) {
@@ -337,6 +407,10 @@ public class Game {
     }
 
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * Determines the winner based on prestige points and number of bonuses if a tie results
+     * @param players arrayList of all Players
+     */
     private static void determineWinner(ArrayList<Player> players) {
         ArrayList<Player> winner = new ArrayList<>();
         for (Player player : players) {
@@ -365,8 +439,17 @@ public class Game {
     }
 
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * Returns true if action to buy development card valid, false otherwise
+     * @param sc Scanner
+     * @param tb TokenBank
+     * @param player Current player
+     * @param developmentFaceUp Face up development cards
+     * @param developmentDeck Development cards in remaining deck
+     * @return true if action valid, false otherwise
+     */
     private static boolean buyCard(Scanner sc, TokenBank tb, Player player, DevelopmentCardFaceUP developmentFaceUp,
-            DevelopmentCardDeck developmentDesk) {
+            DevelopmentCardDeck developmentDeck) {
         while (true) {
             System.out.print("Enter location of card (Reserve / Market) or type back: ");
             String location = sc.nextLine().trim().toLowerCase();
@@ -441,7 +524,7 @@ public class Game {
                 if (location.equals("reserve")) {
                     player.buyReserve(chosen);
                 } else {
-                    developmentFaceUp.removeAndRefill(level, index, developmentDesk);
+                    developmentFaceUp.removeAndRefill(level, index, developmentDeck);
                 }
 
                 System.out.println("Bought card: " + chosen);
@@ -453,6 +536,15 @@ public class Game {
     }
 
     //--------------------------------------------------------------------------------------------------------
+    /**
+     * Returns true if action to reserve card is valid, false otherwise
+     * @param sc Scanner
+     * @param tb TokenBank
+     * @param player Current player
+     * @param developmentFaceUp Face up development cards
+     * @param developmentDesk Development cards in remaining deck
+     * @return true if action valid, false otherwise
+     */
     private static boolean reserveCard(Scanner sc, TokenBank tb, Player player, DevelopmentCardFaceUP developmentFaceUp,
             DevelopmentCardDeck developmentDesk) {
         if (player.totalReserves() == 3) {
@@ -547,6 +639,12 @@ public class Game {
     }
 
     // --------------------------------------------------------------------------------------------------------
+    /**
+     * Returns true if input color is a token color, false otherwise
+     * Checks for invalid token color inputs
+     * @param c Input color
+     * @return true if color valid, false otherwise
+     */
     private static boolean isTokenColor(String c) {
         return TokenBank.WHITE.equals(c)
                 || TokenBank.BLUE.equals(c)
@@ -556,10 +654,21 @@ public class Game {
                 || TokenBank.GOLD.equals(c);
     }
 
+    /**
+     * Returns true if input command == back, false otherwise
+     * @param input Input command
+     * @return true if command is back, false otherwise
+     */
     private static boolean isBackCommand(String input) {
         return input != null && input.trim().equalsIgnoreCase("back");
     }
 
+    /**
+     * Returns number if input is valid number and null if command is back
+     * @param sc Scanner
+     * @param prompt Prompt for input
+     * @return number if input is valid number, null if command is back
+     */
     private static Integer readIntOrBack(Scanner sc, String prompt) {
         while (true) {
             if (prompt != null && !prompt.isBlank()) {

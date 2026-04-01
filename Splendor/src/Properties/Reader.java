@@ -3,12 +3,21 @@ package Properties;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * The Reader class reads from the config.properties file to determine the winning condition, number of players and number of cards.
+ * Based on the config.properties file, the Reader class can customize the number of tokens as well
+ */
+
 public class Reader {
 
     //java properties object
     private final Properties configProps = new Properties();
     
-    //constructor
+
+    /**
+     * Initialize configProps based on the config.properties file
+     * @throws Exception if config.properties file not found in classpath
+     */
     public Reader() throws Exception {
         InputStream in = getClass().getClassLoader().getResourceAsStream("Properties/config.properties");
         if (in == null) {
@@ -18,24 +27,48 @@ public class Reader {
     }
 
 
-    //method to get pretsige points from file
+    /**
+     * Returns the number of prestige points for a player to end the game as set in the config.properties file
+     * @return number of prestige points for a player to end the game
+     */
     public int getPrestigePointToWin() {
         return Integer.parseInt(configProps.getProperty("prestigePointsToWin"));
     }
 
-    //method to get number of players
+
+    /**
+     * Returns the number of players as set in the config.properties file
+     * @return number of players
+     */
     public int getNumOfPlayers() {
         return Integer.parseInt(configProps.getProperty("numOfPlayers"));
     }
+
     //method to get the number of cards
+    /**
+     * Returns the number of cards as set in the config.properties file
+     * @return number of cards
+     */
     public int getNumOfCards(){
         return Integer.parseInt(configProps.getProperty("numOfCards"));
     }
 
-    //method to get the custom tokemn mode for the bank
+    //method to get the custom token mode for the bank
+    /**
+     * Returns 1 or 0 based on setting in config.properties file
+     * 1 indicates custom token mode where the number of tokens can be set in the config.properties file
+     * @return 1 (custom token mode) or 0 (default)
+     */
     public int getCustomTokenMode(){
         return Integer.parseInt(configProps.getProperty("enableCustomToken"));
     }
+
+    /**
+     * Returns the number of a specific color token as set in the config.properties file
+     * Used when the custom token mode is enabled
+     * @param str color of token
+     * @return number of tokens of that color
+     */
     public int getColourToken(String str){
         String value = configProps.getProperty(str);
         if(value == null){
@@ -51,6 +84,11 @@ public class Reader {
     }
 
     //file paths for the deck tiers
+    /**
+     * Returns the file path of the specific deck tier (level of development card)
+     * @param tier level of development card
+     * @return file path of the csv file containing the development cards of that level
+     */
     public String getTierDeck(int tier){
         return configProps.getProperty("tier"+tier+"DeckDir");
     }

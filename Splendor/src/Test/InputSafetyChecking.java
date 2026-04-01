@@ -1,12 +1,14 @@
 package Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 // This class is use to check all the user input
 // including correct integer input, correct string input for selecting tokens etc.
+/**
+ * The InputSafetyChecking class is used to check all user input for exceptions
+ */
 
 public class InputSafetyChecking {
 
@@ -16,6 +18,12 @@ public class InputSafetyChecking {
     private static final String RED = "RED";
     private static final String BLACK = "BLACK";
 
+    /**
+     * Returns a valid integer after checking for exceptions
+     * @param sc Scanner
+     * @param invalidPrompt Prompt if user input invalid
+     * @return integer
+     */
     public static int safeInt(Scanner sc, String invalidPrompt) {
         while (!sc.hasNextInt()) {
             sc.next();
@@ -26,6 +34,14 @@ public class InputSafetyChecking {
         return sc.nextInt();
     }
 
+    /**
+     * Returns valid number within specified range
+     * @param sc Scanner
+     * @param minInclusive Minimum number of range inclusive
+     * @param maxInclusive Maximum number of range inclusive
+     * @param prompt Prompt for input
+     * @return valid user input of number within the specified range
+     */
     public static int readIntInRange(Scanner sc, int minInclusive, int maxInclusive, String prompt) {
         while (true) {
             if (prompt != null && !prompt.isBlank()) {
@@ -41,6 +57,12 @@ public class InputSafetyChecking {
         }
     }
 
+    /**
+     * Returns a list of 3 token colors if colors valid, null otherwise
+     * @param rawInput String input of 3 token colors
+     * @param takeColors String array of all token colors
+     * @return list of 3 valid token colors, null otherwise
+     */
     public static List<String> parseThreeColorsFlexibly(String rawInput, String[] takeColors) {
 
         if (rawInput == null) {
@@ -83,6 +105,11 @@ public class InputSafetyChecking {
         return colors;
     }
 
+    /**
+     * Returns uppercase of input without whitespaces in the front and back
+     * @param input String input
+     * @return input trimmed and uppercase
+     */
     public static String normalizeUpper(String input) {
         if (input == null) {
             return "";
@@ -90,6 +117,12 @@ public class InputSafetyChecking {
         return input.trim().toUpperCase();
     }
 
+    /**
+     * Returns token color that matches with the start of the input from starting index
+     * @param chunk String input
+     * @param start Starting index of string input to look at
+     * @return token color that matches with the start of the input from starting index
+     */
     public static String matchColor(String chunk, int start) {
         if (chunk.startsWith(WHITE, start)) {
             return WHITE;

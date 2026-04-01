@@ -1,11 +1,13 @@
-/**
- * The TokenBank class stores all the token objects on the board in a hashmap
- */
+
 
 package Cards.Token;
 
 import Properties.*;
 import java.util.HashMap;
+
+/**
+ * The TokenBank class stores all the token objects on the board in a hashmap
+ */
 
 public class TokenBank{
 

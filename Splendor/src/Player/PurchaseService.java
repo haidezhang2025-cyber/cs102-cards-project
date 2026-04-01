@@ -1,10 +1,12 @@
-/**
- * The purchaseService class checks and facilitates the buying of a development card by a player
-*/
+
 package Player;
 
 import Cards.DevelopmentCard.DevelopmentCard;
 import Cards.Token.TokenBank;
+
+/**
+ * The purchaseService class checks and facilitates the buying of a development card by a player
+*/
 
 public class PurchaseService {
     // String list to store all the colors, and we compare the number of each color between the development card and players

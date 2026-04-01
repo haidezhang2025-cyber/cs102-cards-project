@@ -1,9 +1,9 @@
+
+package Cards.AbstractCard;
+import Cards.Token.TokenBank;
 /**
  * The AbstractCard class stores the shared attributes of card objects, which can be used for both Development cards and Noble cards
 */
-package Cards.AbstractCard;
-import Cards.Token.TokenBank;
-
 public abstract class AbstractCard {
     private int points;
     private int blackCost;

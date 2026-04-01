@@ -1,7 +1,9 @@
+
+package Cards.Token;
+
 /**
 This Token class stores the information of a single colour Token object with the repective amount.
 */
-package Cards.Token;
 
 public class Token {
     private String color;

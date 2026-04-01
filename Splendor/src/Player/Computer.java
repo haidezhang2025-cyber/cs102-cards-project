@@ -31,7 +31,7 @@ public class Computer extends Player {
      * @param developmentFaceUp development cards currently face up on the table
      * @param developmentDesk   the current deck of development cards
      * @param winningCondition  amount of points needed to win
-     * @param NobleDeck         nobles currently on the table
+     * @param nobleFaceUp         nobles currently on the table
      * @return a Boolean value indicating whether Computer has reached the winning
      *         condition or not
      */

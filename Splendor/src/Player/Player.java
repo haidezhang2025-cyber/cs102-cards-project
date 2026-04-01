@@ -1,7 +1,4 @@
-/**
- * This player class store the information of a single player object
- * A player has points, bonus owned, tokens owned, developmentCard owned, developmentCard reversed, noble owned
-*/
+
 package Player;
 
 import Cards.DevelopmentCard.DevelopmentCard;
@@ -10,6 +7,10 @@ import Cards.Token.TokenBank;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * The player class store the information of a single player object.
+ * A player has points, bonus owned, tokens owned, developmentCard owned, developmentCard reversed, noble owned
+*/
 public class Player {
 
     // HashMap to store the tokens and Bonuses, basically they are the same object but token is temporary while bonus is permanent
@@ -203,7 +204,6 @@ public class Player {
 
     /**
      * Returns a string containing the player's prestige points, token, bonuses, reserved cards, nobles, total tokens and total cards in reserve
-     * @return string containing the player's prestige points, token, bonuses, reserved cards, nobles, total tokens and total cards in reserve
      */
     public void printStatus() {
         System.out.println("Player points = " + playerPoints + " | tokens = " + playerTokens 

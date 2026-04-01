@@ -1,15 +1,17 @@
-/**
- * The DevelopmentCardDeck class stores and manages all the development cards separated by level
-*/
+
 package Cards.DevelopmentCard;
 
+import Properties.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import Properties.*;
+
+/**
+ * The DevelopmentCardDeck class stores and manages all the development cards separated by level
+*/
 public class DevelopmentCardDeck {
 
     // ArrayList to store the different card with different level.
@@ -19,7 +21,6 @@ public class DevelopmentCardDeck {
 
     /**
      * Initializes and shuffles development card decks by level
-     * Calls methods initialiseCards and shuffleDecks
      */
     public DevelopmentCardDeck() {
         level1Deck = new ArrayList<>();

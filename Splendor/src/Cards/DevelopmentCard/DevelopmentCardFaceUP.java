@@ -1,10 +1,11 @@
-/**
- * The DevelopmentCardFaceUP class stores the 4 development cards of each level which are face up on the table for players to purchase. 
-*/
+
 package Cards.DevelopmentCard;
 
 import java.util.ArrayList;
 
+/**
+ * The DevelopmentCardFaceUP class stores the 4 development cards of each level which are face up on the table for players to purchase. 
+*/
 public class DevelopmentCardFaceUP {
 
     // ArrayList to store 4 cards of each level
