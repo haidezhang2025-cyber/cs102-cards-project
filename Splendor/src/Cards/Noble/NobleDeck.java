@@ -1,12 +1,10 @@
 package Cards.Noble;
 
-import Cards.Token.TokenBank;
-import Player.Player;
 import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * The NobleDeck class 
+ * The NobleDeck class
  */
 
 public class NobleDeck {
@@ -21,7 +19,7 @@ public class NobleDeck {
     // Create all nobles, there are 10 nobles in total
     private void createNobles() {
     // call noble constructor: new Noble(points, blackCost, whiteCost, redCost, blueCost, greenCost)
-    // Note: The Cost here is not the cost of token, it is the number of particular color development card
+    // Note: The Cost here is not the cost of token, it is the number of particular color development card 
     //       a player must have. This is the actually the bonus a player owned.
 
         nobles.add(new Noble(3, 0, 0, 4, 0, 4, "noble1")); // 4R + 4G
@@ -67,25 +65,6 @@ public class NobleDeck {
     // check if the noble desk is empty
     public boolean isEmpty() {
         return nobles.isEmpty();
-    }
-
-    //buggy! shouldn't get attractableNobles from total list of nobles, instead from noble face up
-    // check if noble will be attracted by the player
-    // Note there is possibility that player meet the qualification for multiple nobles at the same time
-    // so the player should choose one and only one noble per round from all the eligible nobles
-    public ArrayList<Noble> getAttractableNobles(Player player) {
-        ArrayList<Noble> eligibleNobles = new ArrayList<>();
-
-        for (Noble noble : nobles) {
-            if (player.getBonus(TokenBank.BLACK) >= noble.getCost(TokenBank.BLACK) &&
-                player.getBonus(TokenBank.WHITE) >= noble.getCost(TokenBank.WHITE) &&
-                player.getBonus(TokenBank.RED)   >= noble.getCost(TokenBank.RED) &&
-                player.getBonus(TokenBank.BLUE)  >= noble.getCost(TokenBank.BLUE) &&
-                player.getBonus(TokenBank.GREEN) >= noble.getCost(TokenBank.GREEN)){
-                eligibleNobles.add(noble);
-            }
-        }
-        return eligibleNobles;
     }
 
 }

@@ -264,12 +264,6 @@ public class Game {
 
     //-----------------------------------------------------------------------------------------------------------------
     private static boolean takeThreeTokens(Scanner sc, TokenBank tb, Player player) {
-
-        if (player.totalTokens() + 3 > 10) {
-            System.out.println("You cannot take 3 tokens because you would exceed 10 tokens.");
-            return false;
-        }
-
         while (true){
             System.out.println(
                     "Enter 3 DIFFERENT colors (WHITE/BLUE/GREEN/RED/BLACK) separated by spaces (or type back):");
@@ -312,11 +306,6 @@ public class Game {
 
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private static boolean takeTwoTokens(Scanner sc, TokenBank tb, Player player) {
-        if (player.totalTokens() + 2 > 10) {
-            System.out.println("You cannot take 2 tokens because you would exceed 10 tokens.");
-            return false;
-        }
-
         String color = "";
         while (true) {
             System.out.println("Enter a color (WHITE/BLUE/GREEN/RED/BLACK) or type back:");

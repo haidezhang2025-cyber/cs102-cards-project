@@ -58,7 +58,7 @@ public class Computer extends Player {
         }
 
         // The correct order should be check if the computer can attract nobles before enter into final round
-        // even though the computer may have prestigious point >= 15 but we still need to check all the possible 
+        // even though the computer may have prestigious point >= 15 but we still need to check all the possible
         // game action before enter into the final round.
 
         // end turn discard cleanup
@@ -99,6 +99,7 @@ public class Computer extends Player {
                     return true;
                 }
             } catch (Exception e) {
+                continue;
             }
         }
 
@@ -114,6 +115,7 @@ public class Computer extends Player {
                         return true;
                     }
                 } catch (Exception e) {
+                    continue;
                 }
             }
         }
@@ -127,32 +129,30 @@ public class Computer extends Player {
      * @return a Boolean value indicating whether Computer has successfully taken three tokens or not
      */
     private boolean computerTakeThreeTokens(TokenBank tb) {
-        if (this.totalTokens() + 3 <= 10) {
-            Collections.shuffle(randomizedTokenColors);
-            String[] colors = new String[3];
-            int randomizedTokenColorsIndex = 0;
-            for (int i = 0; i < 3; i++) {
-                while (randomizedTokenColorsIndex < randomizedTokenColors.size()) {
-                    String currColor = randomizedTokenColors.get(randomizedTokenColorsIndex);
-                    if (tb.hasEnough(currColor, 1)) {
-                        colors[i] = currColor;
-                        break;
-                    }
-                    randomizedTokenColorsIndex++;
+        Collections.shuffle(randomizedTokenColors);
+        String[] colors = new String[3];
+        int randomizedTokenColorsIndex = 0;
+        for (int i = 0; i < 3; i++) {
+            while (randomizedTokenColorsIndex < randomizedTokenColors.size()) {
+                String currColor = randomizedTokenColors.get(randomizedTokenColorsIndex);
+                if (tb.hasEnough(currColor, 1)) {
+                    colors[i] = currColor;
+                    break;
                 }
                 randomizedTokenColorsIndex++;
             }
-            // means there's 3 colors Computer are allowed to take, therefore taking three tokens is valid
-            if (colors[2] != null) {
-                System.out.print("Computer has taken ");
-                for (String color : colors) {
-                    tb.remove(color, 1);
-                    this.addTokens(color, 1);
-                    System.out.print(color + " ");
-                }
-                System.out.print("tokens.");
-                return true;
+            randomizedTokenColorsIndex++;
+        }
+        // means there's 3 colors Computer are allowed to take, therefore taking three tokens is valid
+        if (colors[2] != null) {
+            System.out.print("Computer has taken ");
+            for (String color : colors) {
+                tb.remove(color, 1);
+                this.addTokens(color, 1);
+                System.out.print(color + " ");
             }
+            System.out.print("tokens.");
+            return true;
         }
         return false;
     }
@@ -164,25 +164,23 @@ public class Computer extends Player {
      * @return a Boolean value indicating whether Computer has successfully taken two tokens or not
      */
     private boolean computerTakeTwoTokens(TokenBank tb) {
-        if (this.totalTokens() + 2 <= 10) {
-            Collections.shuffle(randomizedTokenColors);
-            String color = null;
-            int randomizedTokenColorsIndex = 0;
-            while (randomizedTokenColorsIndex < randomizedTokenColors.size()) {
-                String currColor = randomizedTokenColors.get(randomizedTokenColorsIndex);
-                if (tb.hasEnough(currColor, 4)) {
-                    color = currColor;
-                    break;
-                }
-                randomizedTokenColorsIndex++;
+        Collections.shuffle(randomizedTokenColors);
+        String color = null;
+        int randomizedTokenColorsIndex = 0;
+        while (randomizedTokenColorsIndex < randomizedTokenColors.size()) {
+            String currColor = randomizedTokenColors.get(randomizedTokenColorsIndex);
+            if (tb.hasEnough(currColor, 4)) {
+                color = currColor;
+                break;
             }
+            randomizedTokenColorsIndex++;
+        }
 
-            if (color != null) {
-                System.out.print("Computer has taken 2 " + color + " tokens.");
-                tb.remove(color, 2);
-                this.addTokens(color, 2);
-                return true;
-            }
+        if (color != null) {
+            System.out.print("Computer has taken 2 " + color + " tokens.");
+            tb.remove(color, 2);
+            this.addTokens(color, 2);
+            return true;
         }
         return false;
     }
@@ -208,6 +206,7 @@ public class Computer extends Player {
                 developmentFaceUp.removeAndRefill(level, 0, developmentDesk);
                 break;
             } catch (Exception e) {
+                continue;
             }
         }
 
