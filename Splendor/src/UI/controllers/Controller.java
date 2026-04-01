@@ -205,19 +205,19 @@ public class Controller {
     private void handleTakeTokens() {
         currentMode = ActionMode.TAKE_TOKENS;
         updateStatus(MoveResult.success("Select tokens of the right"));
-        //statusBarLabel.setText("Select tokens on the right");
+
     }
 
     @FXML
     private void handleBuyCard() {
         currentMode = ActionMode.BUY_CARD;
-        statusBarLabel.setText("Click a face-up or reserved card to buy it");
+        updateStatus(MoveResult.success("Click a face-up or reserved card to buy it"));
     }
 
     @FXML
     private void handleReserveCard() {
         currentMode = ActionMode.RESERVE_CARD;
-        statusBarLabel.setText("Click a face-up card to reserve it, then take a gold coin");
+        updateStatus(MoveResult.success("Click a face-up card to reserve it, then take a gold coint"));
     }
 
     @FXML
@@ -225,6 +225,8 @@ public class Controller {
         if (gameLogic == null) {
             return;
         }
+
+        currentMode = ActionMode.NONE;
 
         MoveResult result = gameLogic.endTurn();
         updateStatus(result);
@@ -454,10 +456,21 @@ public class Controller {
     }
 
 
-/* ----------On Clicks------------------------------------ */
+/* ----------On Token Clicks------------------------------------ */
     @FXML
     private void onGoldTokenClick() {
-        updateStatus(MoveResult.success("Taken Gold Coin"));
+
+
+        if (currentMode != ActionMode.RESERVE_CARD) {
+            updateStatus(MoveResult.fail("You can only take a gold coin once you reserve a card"));
+        } else {
+            MoveResult result = gameLogic.takeGold();
+            updateStatus(result);
+            //handleEndTurn();
+        }
+
+        refreshFromGameLogic();
+
     }
 
     @FXML
