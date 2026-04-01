@@ -4,8 +4,8 @@ So whenever we want to edit the number of token we need to call the methods in t
 */
 package Cards.Token;
 
-import java.util.HashMap;
 import Properties.*;
+import java.util.HashMap;
 
 public class TokenBank{
 

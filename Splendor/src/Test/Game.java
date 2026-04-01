@@ -155,23 +155,23 @@ public class Game {
                                 System.out.println("Invalid choice.");
                                 break;
 
-                            case "1":
+                            case 1:
                                 valid = takeThreeTokens(sc, tb, player);
                                 break;
 
-                            case "2":
+                            case 2:
                                 valid = takeTwoTokens(sc, tb, player);
                                 break;
 
-                            case "3":
+                            case 3:
                                 valid = buyCard(sc, tb, player, developmentFaceUp, developmentDesk);
                                 break;
                         
-                            case "4":
+                            case 4:
                                 valid = reserveCard(sc, tb, player, developmentFaceUp, developmentDesk);
                                 break;
 
-                            case "5":
+                            case 5:
                                 System.out.println("Confirm quit? Y/N: ");
                                 String answer = sc.nextLine().toUpperCase();
                                 if (answer.equals("Y")) {

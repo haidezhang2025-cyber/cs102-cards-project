@@ -8,7 +8,7 @@ public class Reader {
     private final Properties configProps = new Properties();
 
     public Reader() throws Exception {
-        InputStream in = getClass().getClassLoader().getResourceAsStream("config.properties");
+        InputStream in = getClass().getClassLoader().getResourceAsStream("Properties/config.properties");
         if (in == null) {
             throw new Exception("config.properties not found in classpath");
         }

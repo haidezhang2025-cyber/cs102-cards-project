@@ -83,8 +83,37 @@ public class DevelopmentCardFaceUP {
 
 
     private void printRow(ArrayList<DevelopmentCard> row) {
+        // for (int i = 0; i < row.size(); i++) {
+        //     System.out.println("[" + i + "] " + row.get(i));
+        // }
+
+        String[] colors = {"BLACK", "WHITE", "RED", "BLUE", "GREEN"};
+        String[][] matrix = new String[9][row.size()];
+
         for (int i = 0; i < row.size(); i++) {
-            System.out.println("[" + i + "] " + row.get(i));
+            matrix[0][i] = "Index " + i;
+            matrix[1][i] = "--------------";
+            matrix[2][i] = String.format("| %dpt %6s |", row.get(i).getPoints(), row.get(i).getBonus());
+            matrix[8][i] = "--------------";
+            int point = 7;
+            for (String color : colors) {
+                if (row.get(i).getCost(color) != 0) {
+                    matrix[point][i] = String.format("| %-6s= %-3d|", color, row.get(i).getCost(color));
+                    point -= 1;
+                }
+            }
+            while (point != 2) {
+                matrix[point][i] = "|            |";
+                point -= 1;
+            }
         }
+
+        for (String[] rows : matrix) {
+            for (String val : rows) {
+                System.out.printf("%-17s", val);
+            }
+            System.out.println();
+        }
+     
     }
 }
