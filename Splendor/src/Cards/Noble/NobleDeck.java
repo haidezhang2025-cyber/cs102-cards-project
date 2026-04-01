@@ -5,6 +5,10 @@ import Player.Player;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * The NobleDeck class 
+ */
+
 public class NobleDeck {
 
     private ArrayList<Noble> nobles = new ArrayList<>();

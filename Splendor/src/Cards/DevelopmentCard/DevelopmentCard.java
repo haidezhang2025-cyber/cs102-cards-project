@@ -1,6 +1,5 @@
 /**
-The DevelopmentCard class stores a single development card object, each development object has bonus color, points,
-cost for each token color.
+ * The DevelopmentCard class stores a single development card object, each development object has bonus color, points, cost for each token color.
 */
 package Cards.DevelopmentCard;
 

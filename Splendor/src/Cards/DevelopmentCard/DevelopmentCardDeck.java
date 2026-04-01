@@ -1,5 +1,5 @@
 /**
-This DevelopmentCardDeck class stores and manages all the development cards
+ * The DevelopmentCardDeck class stores and manages all the development cards separated by level
 */
 package Cards.DevelopmentCard;
 
