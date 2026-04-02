@@ -18,6 +18,7 @@ public class Computer extends Player {
 
     /**
      * Executes the Computer's turn by doing these steps:
+     * <pre>
      * 1. Looks for development cards it can buy
      * 1a. Looks through reserve
      * 1b. Looks through market
@@ -26,6 +27,7 @@ public class Computer extends Player {
      * 4. If cannot take two tokens, reserve a development card
      * 5. Ends the turn
      * 6. If is eligible for a noble, takes a noble
+     * </pre>
      * 
      * @param tb                the token bank
      * @param developmentFaceUp development cards currently face up on the table
