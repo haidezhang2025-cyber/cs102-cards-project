@@ -86,6 +86,8 @@ public class Game {
         //list of players
         // numb of players is obtained from properties file
         int numOfPlayers = 0;
+
+        
         try{
             Reader reader = new Reader(); // Create an instance of Reader
             winningCondition = reader.getPrestigePointToWin();
@@ -103,6 +105,8 @@ public class Game {
         } catch (Exception e){
             System.out.println("Cant find file");
         }
+
+
         // If no config properties is found
         if (winningCondition == 0){
             winningCondition = 15;
