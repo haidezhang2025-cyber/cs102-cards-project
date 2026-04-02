@@ -154,6 +154,9 @@ These assets were used for educational/course-project purposes and may have been
 - Retro Pixel Ribbons, Banners and Frames 2  
   https://bdragon1727.itch.io/retro-pixel-ribbons-banners-and-frames-2
 
+**Token Art**
+- Created by ChatGPT-5
+
 ### Noble Card Character Art
 
 **Noble Card People**
