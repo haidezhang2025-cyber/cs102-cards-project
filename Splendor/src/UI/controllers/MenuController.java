@@ -101,7 +101,7 @@ public class MenuController {
     }
 
     private void startCloudParallax() {
-        // Optional: opacity helps depth
+        // opacity helps depth
         bigCloudA.setOpacity(0.65);
         bigCloudB.setOpacity(0.65);
         smallCloudA.setOpacity(0.90);
@@ -145,7 +145,6 @@ public class MenuController {
         btn.setScaleX(1.0);
         btn.setScaleY(1.0);
         
-        // A subtle glow/shadow (choose one)
         DropShadow shadow = new DropShadow();
         shadow.setRadius(18);
         shadow.setSpread(0.15);
@@ -172,45 +171,17 @@ public class MenuController {
             scaleDown.playFromStart();
         });
     
-        // Optional: make it feel clickable
         btn.setOnMousePressed(e -> {
             btn.setScaleX(0.98);
             btn.setScaleY(0.98);
         });
     
         btn.setOnMouseReleased(e -> {
-            // if mouse is still over button, return to hover scale; else normal
             boolean hovering = btn.isHover();
             btn.setScaleX(hovering ? 1.08 : 1.0);
             btn.setScaleY(hovering ? 1.08 : 1.0);
         });
     }
-
-    // @FXML
-    // private void onPlay() {
-    //     try {
-
-    //         List<String> playerNames = new ArrayList<>();
-    //         playerNames.add("Player 1");
-    //         playerNames.add("Player 2");
-
-    //         int winningCondition = 15;
-    //         GameLogic gameLogic = new GameLogic(playerNames, winningCondition);
-
-    //         FXMLLoader loader = new FXMLLoader(getClass().getResource("/UI/views/game.fxml"));
-    //         Parent gameRoot = loader.load();
-
-    //         Controller gameController = loader.getController();
-    //         gameController.setGameLogic(gameLogic);
-
-    //         Stage stage = (Stage) root.getScene().getWindow();
-    //         stage.setScene(new Scene(gameRoot, BASE_W, BASE_H));
-    //         stage.show();
-
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //     }
-    // }
 
     @FXML
     private void onPlay() {

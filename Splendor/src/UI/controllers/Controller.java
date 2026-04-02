@@ -261,8 +261,6 @@ public class Controller {
     }
 
 
-
-
 /* ------------------------------------ Main Action Helpers ------------------------------------ */
     private void handleFaceUpCardClick(int tier, int index) {
         if (gameLogic == null) {
@@ -302,7 +300,7 @@ public class Controller {
         }
     
         if (currentMode != ActionMode.RESERVE_CARD) {
-            updateStatus(MoveResult.fail("Choose Reserve Card first."));
+            updateStatus(MoveResult.fail("Can only reserve the top of deck. Choose Reserve Card first."));
             return;
         }
     
@@ -391,6 +389,7 @@ public class Controller {
         currentPlayerLabel.setText(currentPlayer.getName());
         turnLabel.setText("Turn: " + gameLogic.getTurnNumber());
         pointsLabel.setText("Points: " + currentPlayer.getPoints());
+        pointsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 15px;");                     // matches player token box styling
         viewReservedButton.setText("View Reserved (" + currentPlayer.totalReserves() + ")");
         viewBoughtButton.setText("View Bought (" + currentPlayer.totalDevelopmentCards() + ")");
         viewNobleButton.setText("View Noble (" + currentPlayer.totalNobles() + ")");
@@ -403,8 +402,12 @@ public class Controller {
     }
 
     private boolean didTurnActuallyEnd(MoveResult result) {
-        return "Turn ended.".equals(result.getMessage())
-            || "Player reached winning condition.".equals(result.getMessage());
+        String message = result.getMessage();
+
+        return message.contains("Turn ended.")
+            || message.contains("Final round triggered. Finish the current round.")
+            || message.contains("Final round complete.")
+            || message.contains("Player reached winning condition.");
     }
     
 /* ------------------------------------ Update Parts of UI Helper methods ------------------------------------ */
@@ -425,10 +428,10 @@ public class Controller {
 
     private HBox createTokenBonusRow(String colorName, int tokenCount, int bonusCount) {
         Label leftLabel = new Label(colorName + ": " + tokenCount);
-        leftLabel.setStyle("-fx-text-fill: white;");
+        leftLabel.setStyle("-fx-text-fill: white; -fx-font-size: 15px;");
 
         Label rightLabel = new Label("(+" + bonusCount + ")");
-        rightLabel.setStyle("-fx-text-fill: #cbd5e1; -fx-font-weight: bold;");
+        rightLabel.setStyle("-fx-text-fill: #cbd5e1; -fx-font-weight: bold; -fx-font-size: 15px;");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
