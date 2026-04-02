@@ -70,6 +70,7 @@ This design allows both versions to represent the same game while using differen
 
 ## SRC Package Overview
 
+```
 src/
 ├── Cards/                   # Shared card and token data classes
 │   ├── AbstractCard/        # Base card classes
@@ -83,6 +84,7 @@ src/
     ├── components/          # Reusable UI components such as BoardView and CardView
     ├── controllers/         # JavaFX controllers
     └── views/               # FXML view files
+```
 
 ## Asset Credits
 
