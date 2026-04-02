@@ -143,7 +143,7 @@ public class BoardView extends VBox {
         row.getChildren().clear();
 
         // Add the clickable deck back for reserving from the top of the deck.
-        CardView deckBack = new CardView("tier" + tier + "_deck", backPath, 140, 196);
+        CardView deckBack = new CardView("tier" + tier + "Back", backPath, 140, 196);
         deckBack.setOnMouseClicked(e -> {
             if (onTopDeckClick != null) {
                 onTopDeckClick.accept(tier);

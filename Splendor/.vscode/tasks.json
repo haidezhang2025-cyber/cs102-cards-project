@@ -10,7 +10,7 @@
       },
       "args": [
         "-lc",
-        "set -e; rm -rf classes/UI/images classes/UI/views classes/UI/styles; mkdir -p classes/UI; cp -a src/UI/images classes/UI/; cp -a src/UI/views classes/UI/; if [ -d src/UI/styles ]; then cp -a src/UI/styles classes/UI/; fi"
+        "set -e; for d in classes out; do rm -rf \"$d/UI/images\" \"$d/UI/views\" \"$d/UI/styles\"; mkdir -p \"$d/UI\"; cp -a src/UI/images \"$d/UI/\"; cp -a src/UI/views \"$d/UI/\"; if [ -d src/UI/styles ]; then cp -a src/UI/styles \"$d/UI/\"; fi; done"
       ],
       "problemMatcher": [],
       "presentation": {
