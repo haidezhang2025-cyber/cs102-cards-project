@@ -92,10 +92,6 @@ public class Game {
             Reader reader = new Reader(); // Create an instance of Reader
             winningCondition = reader.getPrestigePointToWin();
             numOfPlayers = reader.getNumOfPlayers();
-            //Test commands to verify if the properties file works
-            // System.out.println(winningCondition);
-            // System.out.println(numOfPlayers);
-
             System.out.println("Config.properties File found!");
             System.out.println("Initializing Game configuration properties");
             System.out.printf("Number of Prestige points to win: %d \n", winningCondition);

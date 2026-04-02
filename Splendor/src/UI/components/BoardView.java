@@ -9,6 +9,7 @@ import Cards.Noble.Noble;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import Properties.*;
 
 /**
  * Displays the main board area of the game.
@@ -87,8 +88,19 @@ public class BoardView extends VBox {
         for (int i = 0; i < nobles.size(); i++) {
             Noble noble = nobles.get(i);
             String cardId = noble.getID();
-            String imagePath = "/UI/images/cards/nobleCards/" + cardId + ".png";
+            String imagePath = null;
 
+            try{
+                Reader reader = new Reader(); // Create an instance of Reader
+                imagePath = reader.getNobleImages() + cardId + ".png";
+                System.out.println("Image Path File found!");
+                System.out.println("Initializing Images..");
+
+                // Call the method on the instance
+            } catch (Exception e){
+                    System.out.println("Cant find file");
+            }
+           // String imagePath = "/UI/images/cards/nobleCards/" + cardId + ".png";
             CardView cardView = new CardView(cardId, imagePath, 120, 120);
             final int nobleIndex = i;
 

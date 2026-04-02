@@ -106,4 +106,12 @@ public class Reader {
     public String getTierDeck(int tier){
         return configProps.getProperty("tier"+tier+"DeckDir");
     }
+    
+    /**
+     * Returns the image path directory for the cards images for Java FX
+     * @return image path directory
+     */
+    public String getNobleImages(){
+        return configProps.getProperty("nobleImages");
+    }
 }
