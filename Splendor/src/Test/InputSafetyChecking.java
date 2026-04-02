@@ -53,7 +53,7 @@ public class InputSafetyChecking {
             if (color >= minInclusive && color <= maxInclusive) {
                 return color;
             }
-            System.out.println("Invalid choice, try again.");
+            System.out.print("Invalid choice, try again:");
         }
     }
 

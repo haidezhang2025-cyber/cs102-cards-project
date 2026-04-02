@@ -97,7 +97,7 @@ public class Game {
             System.out.println("Config.properties File found!");
             System.out.println("Initializing Game configuration properties");
             System.out.printf("Number of Prestige points to win: %d \n", winningCondition);
-            System.out.printf("Number of Players: %d \n ", numOfPlayers);
+            System.out.printf("Number of Players: %d \n", numOfPlayers);
 
             // Call the method on the instance
         } catch (Exception e){
@@ -179,6 +179,7 @@ public class Game {
                         choiceMsg();
 
                         int choice = InputSafetyChecking.readIntInRange(sc, 1, 5, "");
+                        System.out.println();
 
                         switch (choice) {
                             default:
@@ -328,6 +329,7 @@ public class Game {
      */
     private static boolean takeThreeTokens(Scanner sc, TokenBank tb, Player player) {
         while (true){
+            System.out.println();
             System.out.println(
                     "Enter 3 DIFFERENT colors (WHITE/BLUE/GREEN/RED/BLACK) separated by spaces (or type back):");
             System.out.print("> ");
@@ -378,6 +380,7 @@ public class Game {
     private static boolean takeTwoTokens(Scanner sc, TokenBank tb, Player player) {
         String color = "";
         while (true) {
+            System.out.println();
             System.out.println("Enter a color (WHITE/BLUE/GREEN/RED/BLACK) or type back:");
             System.out.print("> ");
             color = InputSafetyChecking.normalizeUpper(sc.nextLine());
@@ -388,7 +391,7 @@ public class Game {
 
             String matched = InputSafetyChecking.matchColor(color, 0);
             if (matched == null || matched.length() != color.length()) {
-                System.out.println("Please enter valid color.");
+                System.out.println("Please enter a valid color.");
                 continue;
             }
             if (!tb.hasEnough(color, 4)) {
@@ -451,6 +454,7 @@ public class Game {
     private static boolean buyCard(Scanner sc, TokenBank tb, Player player, DevelopmentCardFaceUP developmentFaceUp,
             DevelopmentCardDeck developmentDeck) {
         while (true) {
+            System.out.println();
             System.out.print("Enter location of card (Reserve / Market) or type back: ");
             String location = sc.nextLine().trim().toLowerCase();
 
@@ -484,6 +488,7 @@ public class Game {
                 }
             } else if (location.equals("market")) {
                 while (true) {
+                    System.out.println();
                     Integer levelInput = readIntOrBack(sc, "Choose level (1/2/3) or type back: ");
                     if (levelInput == null) {
                         return false;
@@ -553,6 +558,7 @@ public class Game {
         }
 
         while (true){
+            System.out.println();
             System.out.println("Option a: draw first card from any deck");
             System.out.println("Option b: choose a face up card");
             System.out.print("Your Choice (a/b, or type back): ");
@@ -569,6 +575,7 @@ public class Game {
             DevelopmentCard chosen = null;
             if (choice == 'a') {
                 while (true) {
+                    System.out.println();
                     Integer levelInput = readIntOrBack(sc, "Enter level (1/2/3) or type back: ");
                     if (levelInput == null) {
                         return false;
@@ -593,6 +600,7 @@ public class Game {
                 }
             } else if (choice == 'b') {
                 while (true) {
+                    System.out.println();
                     Integer levelInput = readIntOrBack(sc, "Choose level (1/2/3) or type back: ");
                     if (levelInput == null) {
                         return false;
@@ -684,6 +692,7 @@ public class Game {
                 return Integer.parseInt(line);
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a valid number or type back.");
+                System.out.println();
             }
         }
     }
