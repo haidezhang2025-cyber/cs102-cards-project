@@ -1,8 +1,64 @@
 # CS102-cards-project
 
+## Overview
+
+This project is a Java implementation of the game **Splendor** with two different user interfaces:
+
+- **Console UI**
+- **JavaFX GUI**
+
+Both versions implement the same game and share many of the same core classes, but they do not use exactly the same supporting classes for game flow and interaction.
+
+## Requirements
+
+Before running the project, make sure you have:
+
+- Java installed (**JDK 24 or later**)
+- The **JavaFX SDK** downloaded and unzipped for your system  
+  (Download from: https://gluonhq.com/products/javafx/)
+- Terminal or bash access to run the provided scripts
+
+> Note: The JavaFX version may require system-specific configuration depending on your operating system and JavaFX installation path.
+
+## How to Run
+
+### Console Version
+
+Use the console scripts to compile and run the text-based version of the game.
+
+```bash
+./compile.sh
+./run.sh
+```
+
+### JavaFX Version
+
+The JavaFX GUI uses separate scripts depending on the operating system.
+> Before running the JavaFX scripts, you must edit the script file and replace the JavaFX SDK path with your own local file path to the downloaded and unzipped `javafx/lib` folder.
+
+#### Linux
+
+```bash
+./compileLinuxFx.sh
+./runLinuxFx.sh
+```
+
+#### macOS
+
+```bash
+./compileMacFx.sh
+./runMacFx.sh
+```
+
+### Notes
+
+- The console UI and JavaFX GUI are separate entry points.
+- Both versions use the same shared backend classes for cards, nobles, tokens, and players.
+- The JavaFX version requires JavaFX to be installed and configured correctly on your system.
+- Edit the script names or commands above as needed to match your final setup.
+
 ## Project Structure: JavaFX UI and Console UI
 
-This project includes two different user interfaces: a **JavaFX GUI** and a **console UI**.  
 Although both versions implement the same game, they do not use exactly the same supporting classes.
 
 ### Shared Classes
@@ -23,18 +79,21 @@ These shared classes store the game state and data structures needed regardless 
 
 Some important classes differ between the two versions.
 
-#### JavaFX version
+#### JavaFX Version
+
 The JavaFX version uses:
+
 - `GameLogic` to manage turn flow, actions, noble selection, and win-condition logic
 - `MoveResult` to report whether an action succeeded and what message should be shown in the GUI
 - `NobleService` to handle noble eligibility and awarding
 - `ComputerService` to control the computer player's decisions
 
-#### Console version
+#### Console Version
+
 The console UI does not use those same classes in the same way:
+
 - game flow is handled directly inside `Game.java` instead of through `GameLogic`
 - `MoveResult` is not used, since it is mainly designed for JavaFX controller feedback
-- `NobleAttractService` is used instead of `NobleService`
 - the `Computer` class is used directly instead of `ComputerService`
 
 ### Rough Equivalents Between the Two Versions
@@ -70,7 +129,7 @@ This design allows both versions to represent the same game while using differen
 
 ## SRC Package Overview
 
-```
+```text
 src/
 ├── Cards/                   # Shared card and token data classes
 │   ├── AbstractCard/        # Base card classes
@@ -105,46 +164,32 @@ These assets were used for educational/course-project purposes and may have been
 
 - Craftpix — Free Pixel Art Fantasy 2D Battlegrounds  
   https://craftpix.net/freebies/free-pixel-art-fantasy-2d-battlegrounds/
-
 - Craftpix — Free Mountain Backgrounds Pixel Art  
   https://craftpix.net/freebies/free-mountain-backgrounds-pixel-art/
-
 - Craftpix — Free Mountain Peak Pixel Art Backgrounds  
   https://craftpix.net/freebies/free-mountain-peak-pixel-art-backgrounds/
-
 - Craftpix — Forest and Trees Free Pixel Backgrounds  
   https://craftpix.net/freebies/forest-and-trees-free-pixel-backgrounds/
-
 - Craftpix — Free Post-Apocalyptic Pixel Art Game Backgrounds  
   https://craftpix.net/freebies/free-post-apocalyptic-pixel-art-game-backgrounds/
-
 - Craftpix — Free War Pixel Art 2D Backgrounds  
   https://craftpix.net/freebies/free-war-pixel-art-2d-backgrounds/
-
 - Craftpix — Free Winter Backgrounds Pixel Art  
   https://craftpix.net/freebies/free-winter-backgrounds-pixel-art/
-
 - Craftpix — Free Nature Pixel Backgrounds for Games  
   https://craftpix.net/freebies/free-nature-pixel-backgrounds-for-games/
-
 - Craftpix — Free Fairy Tale Game Backgrounds  
   https://craftpix.net/freebies/free-fairy-tale-game-backgrounds/
-
 - Craftpix — Free Winter Nature Pixel Game Backgrounds  
   https://craftpix.net/freebies/free-winter-nature-pixel-game-backgrounds/
-
 - Craftpix — Free Pixel Art Abandoned Places Background Collection  
   https://craftpix.net/freebies/free-pixel-art-abandoned-places-background-collection/
-
 - Craftpix — Free Moon Pixel Game Backgrounds  
   https://craftpix.net/freebies/free-moon-pixel-game-backgrounds/
-
 - Craftpix — Free Crystal Cave Pixel Art Backgrounds  
   https://craftpix.net/freebies/free-crystal-cave-pixel-art-backgrounds/
-
 - Craftpix — Free Steampunk Cityscape Pixel Backgrounds  
   https://craftpix.net/freebies/free-steampunk-cityscape-pixel-backgrounds/
-
 - Craftpix — Free Pixel Sky With Parallax Clouds for 2D Games  
   https://craftpix.net/freebies/free-pixel-sky-with-parallax-clouds-for-2d-games/
 
