@@ -3,3 +3,5 @@ Splendor/classes/
 Splendor/.vscode/launch.json
 **/out/
 **/out/
+Splendor/LinuxOSX64/
+Splendor/MacOSARM/
